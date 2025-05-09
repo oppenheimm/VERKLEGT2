@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load humanize %}
+
 
 {% block content %}
 <div class="max-w-4xl mx-auto px-4 py-8">
@@ -29,7 +31,7 @@
 
   <!-- Property details -->
   <p class="text-gray-600 mb-2"><strong>Location:</strong> {{ property.address }}, {{ property.city }} {{ property.zip_code }}</p>
-  <p class="text-gray-600 mb-2"><strong>Price:</strong> ${{ property.price }}</p>
+  <p class="text-gray-600 mb-2"><strong>Price:</strong> ${{ property.price|floatformat:"0"|intcomma }}</p>
   <p class="text-gray-600 mb-2"><strong>Bedrooms:</strong> {{ property.bedrooms }}</p>
   <p class="text-gray-600 mb-2"><strong>Bathrooms:</strong> {{ property.bathrooms }}</p>
   <p class="text-gray-600 mb-2"><strong>Size:</strong> {{ property.sqft }} sq ft</p>
