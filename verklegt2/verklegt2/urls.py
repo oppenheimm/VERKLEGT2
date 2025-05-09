@@ -15,11 +15,20 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+"""bara fyrir procuction"""
+from django.conf import settings
+from django.conf.urls.static import static
+
+"""bara fyrir procuction"""
+
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from core.views import index
 
 urlpatterns = [
     path("", index, name="index"),
     path("admin/", admin.site.urls),
-]
+    path("contact/", index, name="contact"),
+    path("items/", include("item.urls")),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+"""bara fyrir procuction + """

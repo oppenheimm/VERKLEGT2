@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>{% block title %}{% endblock %} | Castle Apartments</title>
+  </head>
+
+  <!-- 1️⃣  Make body a flex column that spans full height  -->
+  <body class="flex flex-col min-h-screen">
+    <!-- NAVBAR (unchanged) -->
+    <nav class="bg-gray-800 py-6 px-6 flex items-center">
+      <a href="{% url 'index' %}" class="text-white text-lg font-semibold">
+        Castle Apartments
+      </a>
+
+      <div class="flex-1 flex justify-center">
+        <a href="{% url 'index' %}"
+           class="text-gray-300 font-semibold hover:text-white px-3 py-2 text-sm">
+          Home
+        </a>
+        <a href="{% url 'contact' %}"
+           class="text-gray-300 font-semibold hover:text-white px-3 py-2 text-sm">
+          Contact
+        </a>
+      </div>
+
+      <div class="space-x-3">
+        <a href="#" class="text-gray-300 hover:text-white text-sm">Sign up</a>
+        <a href="#" class="text-gray-300 hover:text-white text-sm">Log in</a>
+      </div>
+    </nav>
+
+    <!-- 2️⃣  Give the main content flex-grow so it pushes footer down  -->
+    <main class="flex-1 px-6 py-6">
+      {% block content %}{% endblock %}
+    </main>
+
+    <!-- FOOTER will now stay at the bottom -->
+    <footer class="bg-gray-800 py-6 px-6 flex items-center justify-center">
+      <p class="text-gray-300 text-sm">
+        © 2025 Castle Apartments. All rights reserved.
+      </p>
+    </footer>
+  </body>
+</html>
