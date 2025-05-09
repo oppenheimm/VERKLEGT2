@@ -1,53 +1,84 @@
-<!doctype html>
-<html>
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Castle Apartments | Find Perfect Property{% endblock %}</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>{% block title %}{% endblock %} | Castle Apartments</title>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "ui-sans-serif", "system-ui"],
+            },
+            colors: {
+              brand: {
+                DEFAULT: "#4f46e5",
+                light: "#eef2ff",
+              },
+              dark: {
+                DEFAULT: "#0f0e3c",
+                700: "#1a1a70",
+              },
+            },
+          },
+        },
+      };
+    </script>
+    {% block extra_head %}{% endblock %}
   </head>
 
-  <!-- 1️⃣  Make body a flex column that spans full height  -->
-  <body class="flex flex-col min-h-screen">
-    <!-- NAVBAR (unchanged) -->
-    <nav class="bg-gray-800 py-6 px-6 flex items-center">
-      <a href="{% url 'core:index' %}" class="text-white text-lg font-semibold">
-        Castle Apartments
+  <body class="font-sans antialiased text-slate-900">
+    <!-- Header -->
+    <header class="bg-brand-light mb-6">
+      <div class="container mx-auto max-w-7xl px-6 py-6 flex items-center justify-between w-full">
+      <a href="/" class="flex items-center gap-2 text-xl font-bold">
+        <span class="text-2xl">🏰</span> Castle Apartments
       </a>
 
-      <div class="flex-1 flex justify-center">
-        <a href="{% url 'core:index' %}"
-           class="text-gray-300 font-semibold hover:text-white px-3 py-2 text-sm">
-          Home
-        </a>
-        <a href="{% url 'core:contact' %}"
-           class="text-gray-300 font-semibold hover:text-white px-3 py-2 text-sm">
-          Contact
-        </a>
+      <nav class="hidden md:block">
+        <ul class="flex gap-8 font-medium">
+          <li><a class="hover:text-brand" href="#">Buy</a></li>
+          <li><a class="hover:text-brand" href="#">Sell</a></li>
+          <li><a class="hover:text-brand" href="#">Manage Property</a></li>
+          <li><a class="hover:text-brand" href="#">Resources</a></li>
+        </ul>
+      </nav>
+
+      <div class="flex gap-4">
+        <button class="px-5 py-2 rounded-lg border-2 border-brand font-semibold hover:bg-brand hover:text-white transition">Login</button>
+        <button class="px-5 py-2 rounded-lg bg-brand text-white font-semibold hover:opacity-90 transition">Sign up</button>
+      </div>
+    </div>
+    </header>
+
+    <!-- Page Content -->
+    {% block content %}{% endblock %}
+
+    <!-- Footer -->
+    <footer class="bg-slate-50 py-16 text-sm">
+      <div class="container mx-auto max-w-7xl px-6 grid sm:grid-cols-2 lg:grid-cols-6 gap-10">
+        <!-- ... footer columns kept as-is ... -->
+        {% comment %} You can reuse your full footer HTML here from index.html {% endcomment %}
       </div>
 
-      <div class="space-x-3">
-        {% if request.user.is_authenticated %}
-          <a href="#" class="text-gray-300 hover:text-white text-sm">Inbox</a>
-          <a href="#" class="text-gray-300 hover:text-white text-sm">Dashboard</a>
-          <a href="#" class="text-gray-300 font-medium :text-white text-sm">Log Out</a>
-        {% else %}
-          <a href="{% url 'core:signup'%}" class="text-gray-300 hover:text-white text-sm">Sign up</a>
-          <a href="{% url 'core:login'%}" class="text-gray-300 hover:text-white text-sm">Log in</a>
-        {% endif %}
+      <div class="text-center mt-12">
+        <div class="flex justify-center gap-6 text-xl text-slate-600 mb-6">
+          <a href="#">📘</a>
+          <a href="#">📸</a>
+          <a href="#">🐦</a>
+          <a href="#">💼</a>
+        </div>
+        <p class="text-slate-500">©2024 Estatery. All rights reserved</p>
       </div>
-    </nav>
-
-    <!-- 2️⃣  Give the main content flex-grow so it pushes footer down  -->
-    <main class="flex-1 px-6 py-6">
-      {% block content %}{% endblock %}
-    </main>
-
-    <!-- FOOTER will now stay at the bottom -->
-    <footer class="bg-gray-800 py-6 px-6 flex items-center justify-center">
-      <p class="text-gray-300 text-sm">
-        © 2025 Castle Apartments. All rights reserved.
-      </p>
     </footer>
   </body>
 </html>
+
