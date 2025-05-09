@@ -6,9 +6,7 @@ class Category(models.Model):
     name = models.CharField(max_length=100)
 
     class Meta:
-        ordering = [
-            "name",
-        ]
+        ordering = ["name"]
         verbose_name_plural = "Categories"
 
     def __str__(self):
@@ -28,27 +26,45 @@ class Property(models.Model):
     is_published = models.BooleanField(default=True)
     is_sold = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
-    category = models.ForeignKey(
-        Category, related_name="items", on_delete=models.SET_NULL, null=True, blank=True
-    )
-    def property_main_image_path(instance, filename):
-        # File will be uploaded to MEDIA_ROOT/property_photos/id/filename
-        return f'property_photos/{instance.id}/{filename}'
 
-    main_image = models.ImageField(upload_to=property_main_image_path, blank=True, null=True)
+    # NEW: link every listing to its creator
+    owner = models.ForeignKey(
+        User,
+        related_name="properties",
+        on_delete=models.CASCADE,
+    )
+
+    category = models.ForeignKey(
+        Category,
+        related_name="items",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
+
+    def property_main_image_path(instance, filename):
+        return f"property_photos/{instance.id}/{filename}"
+
+    main_image = models.ImageField(
+        upload_to=property_main_image_path,
+        blank=True,
+        null=True,
+    )
 
     class Meta:
-        ordering = [
-            "title",
-        ]
+        ordering = ["title"]
 
     def __str__(self):
         return self.title
-    
-    
+
+
 class PropertyImage(models.Model):
-    property = models.ForeignKey(Property, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to='property_photos/')
+    property = models.ForeignKey(
+        Property,
+        on_delete=models.CASCADE,
+        related_name="images",
+    )
+    image = models.ImageField(upload_to="property_photos/")
     caption = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
