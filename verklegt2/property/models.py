@@ -32,6 +32,8 @@ class Property(models.Model):
         User,
         related_name="properties",
         on_delete=models.CASCADE,
+        null=True,
+        blank=True,
     )
 
     category = models.ForeignKey(
