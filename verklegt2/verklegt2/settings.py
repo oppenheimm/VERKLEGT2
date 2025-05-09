@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "dashboard",
     "core",
-    "item",
     "property",
     "crispy_forms",
     "crispy_tailwind",

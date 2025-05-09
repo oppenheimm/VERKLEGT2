@@ -28,7 +28,6 @@ from core.views import index
 urlpatterns = [
     path("", include("core.urls")),
     path("admin/", admin.site.urls),
-    path("items/", include("item.urls")),
     path("property/", include("property.urls")),
     path(
         "dashboard/",
