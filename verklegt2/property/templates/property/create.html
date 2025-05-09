@@ -1,0 +1,17 @@
+{% extends "property/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+  <div class="max-w-xl mx-auto py-8 px-4">
+    <h1 class="text-2xl font-bold mb-4">Create a New Property</h1>
+    <form method="POST" enctype="multipart/form-data" class="space-y-4">
+      {% csrf_token %}
+      {{ form|crispy }}
+
+      <label for="id_extra_images" class="block text-sm font-medium text-gray-700">Upload additional images</label>
+      <input type="file" name="extra_images" id="id_extra_images" multiple class="block w-full border rounded py-2 px-3" />
+
+      <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Submit</button>
+    </form>
+  </div>
+{% endblock %}

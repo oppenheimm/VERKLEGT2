@@ -1,0 +1,47 @@
+{% extends "property/base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold mb-4">{{ property.title }}</h1>
+
+  <!-- Main image -->
+  {% if property.main_image %}
+    <img
+      src="{{ property.main_image.url }}"
+      alt="Main Image"
+      class="w-full rounded-md mb-6"
+    />
+  {% endif %}
+
+  <!-- Extra images -->
+  {% if property.images.all %}
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+      {% for image in property.images.all %}
+        <div>
+          <img src="{{ image.image.url }}" alt="{{ image.caption }}" class="rounded-md shadow-sm" />
+          {% if image.caption %}
+            <p class="text-sm text-gray-500 mt-1">{{ image.caption }}</p>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- Property details -->
+  <p class="text-gray-600 mb-2"><strong>Location:</strong> {{ property.address }}, {{ property.city }} {{ property.zip_code }}</p>
+  <p class="text-gray-600 mb-2"><strong>Price:</strong> ${{ property.price }}</p>
+  <p class="text-gray-600 mb-2"><strong>Bedrooms:</strong> {{ property.bedrooms }}</p>
+  <p class="text-gray-600 mb-2"><strong>Bathrooms:</strong> {{ property.bathrooms }}</p>
+  <p class="text-gray-600 mb-2"><strong>Size:</strong> {{ property.sqft }} sq ft</p>
+  <hr class="my-6" />
+  <p>{{ property.description }}</p>
+
+  <form action="{% url 'property:delete' property.id %}" method="POST" class="mt-6">
+    {% csrf_token %}
+    <button type="submit" onclick="return confirm('Are you sure you want to delete this property?');"
+      class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+      Delete Property
+    </button>
+  </form>
+</div>
+{% endblock %}
