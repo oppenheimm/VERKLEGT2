@@ -1,16 +1,14 @@
 from django.shortcuts import render, redirect
-
-
 from item.models import Item, Category
-
 from .forms import SignUpForm
+from property.models import Property
 
 
 def index(request):
-    items = Item.objects.filter(is_sold=False)[0:6]
+    properties = Property.objects.filter(is_published=True, is_sold=False)[:6]
     categories = Category.objects.all()
     context = {
-        "items": items,
+        "featured_properties": properties,
         "categories": categories,
     }
     return render(request, "core/index.html", context)
