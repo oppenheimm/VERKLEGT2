@@ -17,7 +17,7 @@ class PropertyAdmin(admin.ModelAdmin):
         "owner",
         "created_at",
     )
-    list_filter = ("is_published", "is_sold", "city", "created_at")
+    list_filter = ("is_published", "is_sold", "owner", "city", "created_at")
     search_fields = ("title", "city", "address", "owner__username")
     inlines = [PropertyImageInline]
 

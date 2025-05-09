@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from item.models import Item, Category
 from .forms import SignUpForm
 from property.models import Property
+from django.contrib.auth import logout
 
 
 def index(request):
@@ -28,3 +29,8 @@ def signup(request):
         form = SignUpForm()  # <- Correct capitalization
 
     return render(request, "core/signup.html", {"form": form})
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('core:index')

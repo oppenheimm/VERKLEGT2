@@ -1,29 +1,45 @@
-{% extends "core/base.html" %}
+{% extends "base.html" %} 
 
-{% block title %}My Listings{% endblock %}
+{% block title %}
+My Listings
+{% endblock %}
 
 {% block content %}
-<h1 class="text-2xl font-semibold mb-6">My Properties</h1>
+<div class="max-w-4xl mx-auto px-4 py-8">
+  <h1 class="text-2xl font-semibold mb-6">My Properties</h1>
 
-{% if properties %}
+  {% if properties %}
   <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
     {% for property in properties %}
-      <a href="{% url 'property:detail' property.id %}" class="block bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-200 overflow-hidden">
-        {% if property.main_image %}
-          <img src="{{ property.main_image.url }}" alt="{{ property.title }}" class="h-48 w-full object-cover" />
+    <a
+      href="{% url 'property:detail' property.id %}"
+      class="block bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-200 overflow-hidden"
+    >
+      {% if property.main_image %}
+      <img
+        src="{{ property.main_image.url }}"
+        alt="{{ property.title }}"
+        class="h-48 w-full object-cover"
+      />
+      {% endif %}
+      <div class="p-4">
+        <h2 class="text-lg font-medium text-gray-800 truncate">
+          {{ property.title }}
+        </h2>
+        <p class="text-sm text-gray-500">{{ property.city }}</p>
+        <p class="mt-2 font-semibold">${{ property.price|floatformat:"2" }}</p>
+        {% if property.is_sold %}
+        <span
+          class="inline-block mt-2 px-2 py-1 text-xs font-semibold bg-red-100 text-red-700 rounded"
+          >Sold</span
+        >
         {% endif %}
-        <div class="p-4">
-          <h2 class="text-lg font-medium text-gray-800 truncate">{{ property.title }}</h2>
-          <p class="text-sm text-gray-500">{{ property.city }}</p>
-          <p class="mt-2 font-semibold">${{ property.price|floatformat:"2" }}</p>
-          {% if property.is_sold %}
-            <span class="inline-block mt-2 px-2 py-1 text-xs font-semibold bg-red-100 text-red-700 rounded">Sold</span>
-          {% endif %}
-        </div>
-      </a>
+      </div>
+    </a>
     {% endfor %}
   </div>
-{% else %}
+  {% else %}
   <p>You haven’t listed any properties yet.</p>
-{% endif %}
+  {% endif %}
+</div>
 {% endblock %}

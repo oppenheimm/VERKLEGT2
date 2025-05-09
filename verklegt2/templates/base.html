@@ -59,20 +59,62 @@
           </ul>
         </nav>
 
+        {% if request.user.is_authenticated %}
+        <div class="flex gap-4 items-center">
+          <a href="#" class="relative">
+            <!-- Notification Icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 text-gray-700 hover:text-brand transition"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 17h5l-1.405-1.405a2.032 2.032 0 00-.595-1.405L18 13V8a6 6 0 10-12 0v5l-.001.19a2.032 2.032 0 00-.595 1.405L3 17h5m7 0v1a3 3 0 11-6 0v-1m6 0H9"
+              />
+            </svg>
+            <span
+              class="absolute top-0 right-0 block h-2 w-2 rounded-full ring-2 ring-white bg-red-600"
+            ></span>
+          </a>
+          <a href="{% url 'dashboard:dashboard' %}">
+            <!-- Profile Icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-8 w-8 text-gray-700 hover:text-brand transition"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M16 14a4 4 0 01-8 0m8-4a4 4 0 11-8 0 4 4 0 018 0z"
+              />
+            </svg>
+          </a>
+        </div>
+        {% else %}
         <div class="flex gap-4">
-            <a
+          <a
             href="{% url 'core:login' %}"
             class="px-5 py-2 rounded-lg border-2 border-brand font-semibold hover:bg-brand hover:text-white transition"
-            >
+          >
             Login
-            </a>
-            <a
+          </a>
+          <a
             href="{% url 'core:signup' %}"
             class="px-5 py-2 rounded-lg bg-brand text-white font-semibold hover:opacity-90 transition"
-            >
+          >
             Sign up
-            </a>
+          </a>
         </div>
+        {% endif %}
       </div>
     </header>
 
@@ -81,27 +123,47 @@
 
     <!-- Footer -->
     <footer class="bg-slate-50 py-16 text-sm">
-      <div
-        class="container mx-auto max-w-7xl px-6 grid sm:grid-cols-2 lg:grid-cols-6 gap-10"
-      >
-        <!-- ... footer columns kept as-is ... -->
-        {% comment %} You can reuse your full footer HTML here from index.html
-        {% endcomment %}
-      </div>
+      <div class="max-w-4xl mx-auto px-4">
+        <div
+          class="container mx-auto max-w-7xl px-6 grid sm:grid-cols-2 lg:grid-cols-6 gap-10"
+        >
+          <!-- ... footer columns kept as-is ... -->
+          {% comment %} You can reuse your full footer HTML here from index.html
+          {% endcomment %}
+        </div>
 
-      <div class="space-x-3">
-        {% if request.user.is_authenticated %}
+        <div class="space-x-3">
+          {% if request.user.is_authenticated %}
           <a href="#" class="text-gray-300 hover:text-white text-sm">Inbox</a>
-          <a href="{% url 'dashboard:dashboard' %}" 
-            class="text-gray-300 hover:text-white text-sm">
-           Dashboard
-         </a>
-         
-          <a href="#" class="text-gray-300 font-medium :text-white text-sm">Log Out</a>
-        {% else %}
-          <a href="{% url 'core:signup'%}" class="text-gray-300 hover:text-white text-sm">Sign up</a>
-          <a href="{% url 'core:login'%}" class="text-gray-300 hover:text-white text-sm">Log in</a>
-        {% endif %}
+          <a
+            href="{% url 'dashboard:dashboard' %}"
+            class="text-gray-300 hover:text-white text-sm"
+          >
+            Dashboard
+          </a>
+
+          <form method="post" action="{% url 'core:logout' %}" class="inline">
+            {% csrf_token %}
+            <button
+              type="submit"
+              class="text-gray-300 hover:text-white text-sm"
+            >
+              Log Out
+            </button>
+          </form>
+          {% else %}
+          <a
+            href="{% url 'core:signup'%}"
+            class="text-gray-300 hover:text-white text-sm"
+            >Sign up</a
+          >
+          <a
+            href="{% url 'core:login'%}"
+            class="text-gray-300 hover:text-white text-sm"
+            >Log in</a
+          >
+          {% endif %}
+        </div>
       </div>
     </footer>
   </body>
