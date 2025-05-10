@@ -73,10 +73,12 @@
       href="{% url 'property:detail' property.id %}"
       class="relative bg-white rounded-xl border shadow-sm hover:shadow-lg hover:-translate-y-1 transition"
     >
-      <span
-        class="absolute top-3 left-3 bg-brand text-white text-xs font-semibold px-2 py-0.5 rounded"
-        >Popular</span
-      >
+      {% if property.is_sold %}
+        <span
+          class="absolute top-3 left-3 bg-red-500 text-white text-xs font-semibold px-2 py-0.5 rounded"
+          >Sold</span
+        >
+      {% endif %}
       <img
         src="{{ property.main_image.url }}"
         alt="{{ property.title }}"

@@ -5,7 +5,7 @@ from django.contrib.auth import logout
 
 
 def index(request):
-    properties = Property.objects.filter(is_published=True, is_sold=False)[:6]
+    properties = Property.objects.filter(is_published=True)[:6]
     categories = Category.objects.all()
     context = {
         "featured_properties": properties,
