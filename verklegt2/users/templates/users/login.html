@@ -1,38 +1,36 @@
 {% extends "base.html" %}
-
-{% block title %}Login{% endblock %}
+{% block title %}Log In{% endblock %}
 
 {% block content %}
 <div class="max-w-md mx-auto mt-16">
-  <div class="bg-white shadow-xl rounded-2xl px-8 py-10">
-    <h1 class="text-3xl font-semibold text-gray-800 text-center mb-8">Login</h1>
+  <div class="bg-white shadow-xl rounded-2xl px-8 py-10 mb-12">
+    <h1 class="text-3xl font-semibold text-gray-800 text-center mb-8">Welcome Back</h1>
 
-    <form method="POST" action="." class="space-y-6">
+    <form method="post" class="space-y-6">
       {% csrf_token %}
       {{ form.non_field_errors }}
 
-      <div>
-        <label for="{{ form.username.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+      <!-- Username -->
+      <div class="mb-6">
+        {{ form.username.label_tag }}
         {{ form.username }}
-        {% if form.username.errors %}
-          <p class="text-xs text-red-600 mt-1">{{ form.username.errors.0 }}</p>
-        {% endif %}
+        {{ form.username.errors }}
       </div>
 
-
-      <div>
-        <label for="{{ form.password.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+      <!-- Password -->
+      <div class="mb-6">
+        {{ form.password.label_tag }}
         {{ form.password }}
-        {% if form.password.errors %}
-          <p class="text-xs text-red-600 mt-1">{{ form.password.errors.0 }}</p>
-        {% endif %}
+        {{ form.password.errors }}
       </div>
 
-
-      <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-lg transition-colors duration-200">
-        Login
+      <!-- Submit Button -->
+      <button type="submit"
+              class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg">
+        Log In
       </button>
     </form>
   </div>
 </div>
 {% endblock %}
+
