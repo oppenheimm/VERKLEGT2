@@ -14,6 +14,13 @@ class Category(models.Model):
 
 
 class Property(models.Model):
+    PROPERTY_TYPE_CHOICES = [
+        ('apartment', 'Apartment'),
+        ('house', 'House'),
+        ('duplex', 'Duplex'),
+        ('studio', 'Studio'),
+        ('land', 'Land'),
+    ]
     title = models.CharField(max_length=100)
     description = models.TextField()
     price = models.DecimalField(max_digits=12, decimal_places=2)
@@ -23,9 +30,16 @@ class Property(models.Model):
     sqft = models.DecimalField(max_digits=10, decimal_places=2)
     bedrooms = models.IntegerField()
     bathrooms = models.IntegerField()
+    year_built = models.IntegerField(blank=True, null=True)
     is_published = models.BooleanField(default=True)
     is_sold = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    type = models.CharField(
+        max_length=20,
+        choices=PROPERTY_TYPE_CHOICES,
+        default='apartment'
+    )
 
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
