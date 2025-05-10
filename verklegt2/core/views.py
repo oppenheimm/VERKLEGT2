@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from property.models import Category, Property
-from .forms import SignUpForm
 from property.models import Property
 from django.contrib.auth import logout
 
