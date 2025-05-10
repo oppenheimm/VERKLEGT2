@@ -102,13 +102,13 @@
         {% else %}
         <div class="flex gap-4">
           <a
-            href="{% url 'core:login' %}"
+            href="{% url 'users:login' %}"
             class="px-5 py-2 rounded-lg border-2 border-brand font-semibold hover:bg-brand hover:text-white transition"
           >
             Login
           </a>
           <a
-            href="{% url 'core:signup' %}"
+            href="{% url 'users:signup' %}"
             class="px-5 py-2 rounded-lg bg-brand text-white font-semibold hover:opacity-90 transition"
           >
             Sign up
@@ -142,7 +142,7 @@
             Dashboard
           </a>
 
-          <form method="post" action="{% url 'core:logout' %}" class="inline">
+          <form method="post" action="{% url 'users:logout' %}" class="inline">
             {% csrf_token %}
             <button
               type="submit"
@@ -153,12 +153,12 @@
           </form>
           {% else %}
           <a
-            href="{% url 'core:signup'%}"
+            href="{% url 'users:signup'%}"
             class="text-gray-300 hover:text-white text-sm"
             >Sign up</a
           >
           <a
-            href="{% url 'core:login'%}"
+            href="{% url 'users:login'%}"
             class="text-gray-300 hover:text-white text-sm"
             >Log in</a
           >

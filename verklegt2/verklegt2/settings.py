@@ -27,9 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-LOGIN_URL = "/login/"
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/"
+LOGIN_URL = 'users:login'
+LOGIN_REDIRECT_URL = '/'       # where to send users after login
+LOGOUT_REDIRECT_URL = 'users:login'
 
 # Application definition
 
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "dashboard",
     "core",
+    'users.apps.UsersConfig',  
     "property",
     "crispy_forms",
     "crispy_tailwind",
@@ -135,3 +136,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Crispy Forms settings
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 CRISPY_TEMPLATE_PACK = "tailwind"
+
+# Custom user model
+AUTH_USER_MODEL = 'users.User'

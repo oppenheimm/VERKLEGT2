@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
 
 
 class Category(models.Model):
@@ -29,9 +29,9 @@ class Property(models.Model):
 
     # NEW: link every listing to its creator
     owner = models.ForeignKey(
-        User,
-        related_name="properties",
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
+        related_name='properties',
         null=True,
         blank=True,
     )
