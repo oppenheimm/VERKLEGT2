@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-2xl mx-auto py-8">
+  <h2 class="text-2xl font-bold mb-4">Edit Property</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {% for field in form %}
+      <div class="mb-4">
+        <label class="block font-medium mb-1" for="{{ field.id_for_label }}">{{ field.label }}</label>
+
+        {# Special case for main_image field to show preview #}
+        {% if field.name == 'main_image' and property.main_image %}
+          <div class="mb-2">
+            <img src="{{ property.main_image.url }}" alt="Current Main Image" class="w-64 rounded shadow" />
+          </div>
+        {% endif %}
+
+        {{ field }}
+
+        {% if field.help_text %}
+          <div class="mt-2 text-sm text-gray-500">{{ field.help_text|safe }}</div>
+        {% endif %}
+        {% if field.errors %}
+          <div class="text-red-500 text-sm">{{ field.errors }}</div>
+        {% endif %}
+      </div>
+    {% endfor %}
+
+    <h3 class="text-xl font-semibold mt-6">Current Images</h3>
+    <div class="grid grid-cols-3 gap-4">
+      {% for image in property.images.all %}
+        <div class="relative">
+          <img src="{{ image.image.url }}" alt="{{ image.caption }}" class="w-64 rounded shadow mb-2" />
+          <label class="block text-sm">
+            <input type="checkbox" name="delete_image_ids" value="{{ image.id }}" class="mr-1" />
+            Delete this image
+          </label>
+        </div>
+      {% endfor %}
+    </div>
+
+    <label for="id_extra_images" class="block text-sm font-medium text-gray-700 mt-6">Upload additional images</label>
+    <input type="file" name="extra_images" id="id_extra_images" multiple class="block w-full border rounded py-2 px-3" />
+
+    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 mt-6">Save Changes</button>
+  </form>
+</div>
+{% endblock %}

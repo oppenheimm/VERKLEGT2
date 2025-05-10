@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 
 from .models import Property, PropertyImage
-from .forms import PropertyForm
+from .forms import PropertyForm, EditPropertyForm
 
 
 def property_list(request):
@@ -57,3 +57,30 @@ def toggle_property_sold(request, pk):
     property.is_sold = not property.is_sold
     property.save()
     return redirect('property:detail', id=pk)
+
+@login_required
+def edit_property(request, id):
+    property = get_object_or_404(Property, pk=id, owner=request.user)
+
+    if request.method == 'POST':
+        form = EditPropertyForm(request.POST, request.FILES, instance=property)
+        if form.is_valid():
+            form.save()
+
+            # Handle image deletions
+            delete_ids = request.POST.getlist('delete_image_ids')
+            if delete_ids:
+                property.images.filter(id__in=delete_ids).delete()
+
+            # Handle new uploads
+            for image_file in request.FILES.getlist('extra_images'):
+                PropertyImage.objects.create(property=property, image=image_file)
+
+            return redirect('property:detail', id=property.id)
+    else:
+        form = EditPropertyForm(instance=property)
+
+    return render(request, 'property/edit_property.html', {
+        'form': form,
+        'property': property
+    })

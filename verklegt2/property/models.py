@@ -27,7 +27,6 @@ class Property(models.Model):
     is_sold = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    # NEW: link every listing to its creator
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
