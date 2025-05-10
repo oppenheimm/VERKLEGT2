@@ -8,11 +8,18 @@
 
   <!-- Main image -->
   {% if property.main_image %}
-    <img
-      src="{{ property.main_image.url }}"
-      alt="Main Image"
-      class="w-full rounded-md mb-6"
-    />
+      <div class="relative">
+        <img
+          src="{{ property.main_image.url }}"
+          alt="Main Image"
+          class="w-full rounded-md mb-6"
+        />
+        {% if property.is_sold %}
+          <span class="absolute top-3 left-3 bg-red-500 text-white text-2xl font-semibold px-4 py-0.5 rounded">
+            Property Sold
+          </span>
+        {% endif %}
+      </div>
   {% endif %}
 
   <!-- Extra images -->
