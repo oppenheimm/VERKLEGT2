@@ -41,9 +41,7 @@ class LogoutView(DjangoLogoutView):
     Handles user logout.
     Uses Django's built-in LogoutView under the hood.
     """
-    template_name = 'users/logout.html'
     next_page = reverse_lazy('users:login')
-
 
 class ProfileDetailView(LoginRequiredMixin, TemplateView):
     """Show profile info with Edit / Change Password buttons."""
