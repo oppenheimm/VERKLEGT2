@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Your Profile{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto mt-16">
+
+  {% if messages %}
+    <div class="mb-6">
+      {% for msg in messages %}
+        <div class="p-4 rounded {% if msg.tags == 'success' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
+          {{ msg }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="bg-white shadow-xl rounded-2xl px-8 py-10">
+    <h1 class="text-3xl font-semibold text-gray-800 text-center mb-8">Your Profile</h1>
+
+    <div class="flex items-center mb-6">
+      {% if user.profile_image %}
+        <img src="{{ user.profile_image.url }}" alt="" class="w-24 h-24 rounded-full object-cover mr-4">
+      {% else %}
+        <div class="w-24 h-24 bg-gray-200 rounded-full mr-4 flex items-center justify-center text-gray-500">
+          No Image
+        </div>
+      {% endif %}
+      <div>
+        <p class="text-lg font-medium text-gray-700">Name: {{ user.name }}</p>
+        <p class="text-md text-gray-600">Email: {{ user.email }}</p>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-4 mt-12 items-start">
+        <a href="{% url 'users:profile_edit' %}"
+           class="inline-block text-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg">
+            Edit Profile
+        </a>
+        <a href="{% url 'users:password_change' %}"
+           class="inline-block text-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg">
+            Change Password
+        </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -93,3 +93,46 @@ class LoginForm(AuthenticationForm):
             'placeholder': 'Password',
         })
     )
+
+
+class ProfileForm(forms.ModelForm):
+    name = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': (
+                'w-full px-4 py-2 '
+                'border border-gray-300 '
+                'rounded-lg focus:outline-none '
+                'focus:ring-2 focus:ring-indigo-400'
+            ),
+            'placeholder': 'Full Name',
+        })
+    )
+    email = forms.EmailField(
+        required=True,
+        widget=forms.EmailInput(attrs={
+            'class': (
+                'w-full px-4 py-2 '
+                'border border-gray-300 '
+                'rounded-lg focus:outline-none '
+                'focus:ring-2 focus:ring-indigo-400'
+            ),
+            'placeholder': 'you@example.com',
+        })
+    )
+    profile_image = forms.ImageField(
+        required=False,
+        widget=forms.ClearableFileInput(attrs={
+            'class': (
+                'block w-full text-sm text-gray-500 '
+                'file:border file:border-gray-300 '
+                'file:rounded-lg file:py-2 file:px-4 '
+                'file:text-gray-700 focus:outline-none '
+                'focus:ring-2 focus:ring-indigo-400'
+            )
+        })
+    )
+
+    class Meta:
+        model = User
+        fields = ['name', 'email', 'profile_image']
