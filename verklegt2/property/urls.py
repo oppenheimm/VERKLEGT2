@@ -11,6 +11,7 @@ urlpatterns = [
     path("create/", views.property_create, name="create"),
     path("<int:id>/", views.property_detail, name="detail"),
     path("<int:id>/delete/", views.property_delete, name="delete"),
+    path('<int:pk>/toggle-sold/', views.toggle_property_sold, name='toggle_property_sold')
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

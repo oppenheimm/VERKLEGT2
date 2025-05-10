@@ -50,3 +50,10 @@ def property_delete(request, id):
     property_obj.delete()
     messages.success(request, "Property deleted successfully.")
     return redirect("property:list")
+
+@login_required
+def toggle_property_sold(request, pk):
+    property = get_object_or_404(Property, pk=pk, owner=request.user)
+    property.is_sold = not property.is_sold
+    property.save()
+    return redirect('property:detail', id=pk)
