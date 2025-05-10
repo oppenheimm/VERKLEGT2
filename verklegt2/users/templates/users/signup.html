@@ -3,8 +3,10 @@
 
 {% block content %}
 <div class="max-w-md mx-auto mt-16">
-  <div class="bg-white shadow-xl rounded-2xl px-8 py-10 mb-12">
-    <h1 class="text-3xl font-semibold text-gray-800 text-center mb-8">Create your account</h1>
+  <div class="bg-white shadow-xl rounded-2xl px-8 py-10">
+    <h1 class="text-3xl font-semibold text-gray-800 text-center mb-8">
+      Create your account
+    </h1>
 
     <form method="post" class="space-y-6">
       {% csrf_token %}
@@ -24,6 +26,27 @@
         {{ form.email.errors }}
       </div>
 
+      <!-- Phone -->
+      <div class="mb-6">
+        {{ form.phone.label_tag }}
+        {{ form.phone }}
+        {{ form.phone.errors }}
+      </div>
+
+      <!-- User Type -->
+      <div class="mb-6">
+        {{ form.user_type.label_tag }}
+        {{ form.user_type }}
+        {{ form.user_type.errors }}
+      </div>
+
+      <!-- Company name (only for agency) -->
+      <div id="div_id_company_name" class="mb-6">
+        {{ form.company_name.label_tag }}
+        {{ form.company_name }}
+        {{ form.company_name.errors }}
+      </div>
+
       <!-- Password -->
       <div class="mb-6">
         {{ form.password1.label_tag }}
@@ -38,14 +61,6 @@
         {{ form.password2.errors }}
       </div>
 
-      <!-- User Type Selector -->
-      <div class="mb-6">
-        {{ form.user_type.label_tag }}
-        {{ form.user_type }}
-        {{ form.user_type.errors }}
-      </div>
-
-      <!-- Submit Button -->
       <button type="submit"
               class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg">
         Sign up
@@ -53,4 +68,24 @@
     </form>
   </div>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const userTypeSelect = document.getElementById('id_user_type');
+    const companyFieldDiv = document.getElementById('div_id_company_name');
+
+    function toggleCompanyField() {
+      if (userTypeSelect.value === 'agency_seller') {
+        companyFieldDiv.style.display = 'block';
+      } else {
+        companyFieldDiv.style.display = 'none';
+      }
+    }
+
+    userTypeSelect.addEventListener('change', toggleCompanyField);
+
+    // Initial call on page load
+    toggleCompanyField();
+  });
+</script>
 {% endblock %}

@@ -35,6 +35,7 @@ class User(AbstractUser):
     ]
 
     # Core fields
+    phone = models.CharField(max_length=20, blank=True)
     email = models.EmailField('email address', unique=True)
     name = models.CharField('full name', max_length=255, blank=True)
     profile_image = models.ImageField(
@@ -70,7 +71,6 @@ class BuyerProfile(models.Model):
         on_delete=models.CASCADE,
         related_name='buyer_profile'
     )
-    phone = models.CharField(max_length=20, blank=True)
     saved_searches = models.JSONField(default=list, blank=True)
 
     def __str__(self):

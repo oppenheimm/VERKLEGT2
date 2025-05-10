@@ -66,9 +66,47 @@ class SignUpForm(UserCreationForm):
         label='Select User Type',
     )
 
-    class Meta:
+    phone = forms.CharField(
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400',
+            'placeholder': 'Your phone number',
+        }),
+        label="Phone number"
+    )
+    
+    company_name = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400',
+            'placeholder': 'Company name (if agency)',
+        }),
+        label="Company name (agency sellers only)"
+    )
+    
+    class Meta(UserCreationForm.Meta):
         model = User
-        fields = ('username', 'email', 'user_type', 'password1', 'password2')
+        fields = ('username', 'email', 'user_type', 'phone', 'company_name', 'password1', 'password2')
+
+    def clean(self):
+        cleaned = super().clean()
+        user_type = cleaned.get('user_type')
+        company = cleaned.get('company_name')
+        if user_type == User.AGENCY_SELLER and not company:
+            self.add_error('company_name', 'Company name is required for agency sellers.')
+        return cleaned
+
+    def save(self, commit=True):
+        user = super().save(commit)
+        # Save phone & company onto the right profile
+        if user.user_type == User.BUYER:
+            user.buyer_profile.phone = self.cleaned_data['phone']
+            user.buyer_profile.save()
+        else:
+            user.seller_profile.phone        = self.cleaned_data['phone']
+            user.seller_profile.company_name = self.cleaned_data['company_name']
+            user.seller_profile.save()
+        return user
 
 class LoginForm(AuthenticationForm):
     username = forms.CharField(
@@ -108,6 +146,20 @@ class ProfileForm(forms.ModelForm):
             'placeholder': 'Full Name',
         })
     )
+    
+    phone = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': (
+                'w-full px-4 py-2 '
+                'border border-gray-300 '
+                'rounded-lg focus:outline-none '
+                'focus:ring-2 focus:ring-indigo-400'
+            ),
+            'placeholder': 'Phone Number',
+        })
+    )
+    
     email = forms.EmailField(
         required=True,
         widget=forms.EmailInput(attrs={
@@ -135,4 +187,4 @@ class ProfileForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['name', 'email', 'profile_image']
+        fields = ['name', 'phone', 'email', 'profile_image']

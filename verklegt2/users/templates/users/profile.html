@@ -17,7 +17,7 @@
   <div class="bg-white shadow-xl rounded-2xl px-8 py-10">
     <h1 class="text-3xl font-semibold text-gray-800 text-center mb-8">Your Profile</h1>
 
-    <div class="flex items-center mb-6">
+    <div class="flex mb-6">
       {% if user.profile_image %}
         <img src="{{ user.profile_image.url }}" alt="" class="w-24 h-24 rounded-full object-cover mr-4">
       {% else %}
@@ -25,9 +25,11 @@
           No Image
         </div>
       {% endif %}
-      <div>
+      <div class="flex flex-col gap-4">
         <p class="text-lg font-medium text-gray-700">Name: {{ user.name }}</p>
+        <p class="text-md text-gray-600">Phone: {{ user.phone }}</p>
         <p class="text-md text-gray-600">Email: {{ user.email }}</p>
+        <p class="text-md text-gray-600">User Type: {{ request.user.user_type }}</p>
       </div>
     </div>
 

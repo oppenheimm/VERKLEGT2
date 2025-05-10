@@ -31,6 +31,16 @@
       </div>
 
       <div>
+        <label for="{{ form.phone.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+          Phone Number
+        </label>
+        {{ form.phone }}
+        {% if form.phone.errors %}
+          <p class="text-red-500 text-sm mt-1">{{ form.phone.errors.0 }}</p>
+        {% endif %}
+      </div>
+
+      <div>
         <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
           Email
         </label>
