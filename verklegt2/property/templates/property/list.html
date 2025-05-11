@@ -7,31 +7,35 @@
   <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
     <!-- You can loop over properties dynamically with Django later -->
     {% for property in properties %}
-    <a
-      href="{% url 'property:detail' property.id %}"
-      class="relative bg-white rounded-xl border shadow-sm hover:shadow-lg hover:-translate-y-1 transition"
-    >
-      {% if property.is_sold %}
-        <span
-          class="absolute top-3 left-3 bg-red-500 text-white text-md font-semibold px-2 py-0.5 rounded"
-          >Sold</span
-        >
-      {% endif %}
-      <img
-        src="{{ property.main_image.url }}"
-        alt="{{ property.title }}"
-        class="h-44 w-full object-cover rounded-t-xl"
-      />
-      <div class="p-4">
-        <p class="font-bold mb-0.5">{{ property.price|floatformat:"0"|intcomma }} kr</p>
-        <h3 class="font-semibold mb-2">{{ property.title }}</h3>
-        <div class="flex flex-wrap gap-4 text-sm text-slate-500">
-          <span>{{ property.bedrooms }} Beds</span>
-          <span>{{ property.bathrooms }} Bathrooms</span>
-          <span>{{ property.sqft }} m²</span>
+      <a
+        href="{% url 'property:detail' property.id %}"
+        class="relative bg-white rounded-xl border shadow-sm hover:shadow-lg hover:-translate-y-1 transition"
+      >
+        {% if property.is_sold %}
+          <span
+            class="absolute top-3 left-3 bg-red-500 text-white text-md font-semibold px-2 py-0.5 rounded"
+            >Sold</span
+          >
+        {% endif %}
+        <img
+          src="{{ property.main_image.url }}"
+          alt="{{ property.title }}"
+          class="h-44 w-full object-cover rounded-t-xl"
+        />
+        <div class="p-4">
+          <h3 class="font-bold">{{ property.title }}</h3>
+          <h2 class="text-sm font-light mb-2 text-gray-500">
+            {{ property.address }}, {{ property.zip_code }} {{ property.city }}
+          </h2>
+          <hr class="my-2" />
+          <p class="font-semibold mb-4">{{ property.price|floatformat:"0"|intcomma }} kr</p>
+          <div class="flex flex-wrap gap-4 text-sm text-slate-500">
+            <span>{{ property.bedrooms }} Beds</span>
+            <span>{{ property.bathrooms }} Bathrooms</span>
+            <span>{{ property.sqft }} m²</span>
+          </div>
         </div>
-      </div>
-    </a>
+      </a>
       {% empty %}
         <p>No properties found.</p>
       {% endfor %}
