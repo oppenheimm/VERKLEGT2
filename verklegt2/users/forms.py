@@ -16,6 +16,19 @@ class SignUpForm(UserCreationForm):
             'placeholder': 'Enter your username',
         })
     )
+    
+    name = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': (
+                'w-full px-4 py-2 '
+                'border border-gray-300 '
+                'rounded-lg focus:outline-none '
+                'focus:ring-2 focus:ring-indigo-400'
+            ),
+            'placeholder': 'Full Name',
+        })
+    )
+    
     email = forms.EmailField(
         widget=forms.EmailInput(attrs={
             'class': (
@@ -86,7 +99,7 @@ class SignUpForm(UserCreationForm):
     
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ('username', 'email', 'user_type', 'phone', 'company_name', 'password1', 'password2')
+        fields = ('username', 'name', 'email', 'user_type', 'phone', 'company_name', 'password1', 'password2')
 
     def clean(self):
         cleaned = super().clean()
