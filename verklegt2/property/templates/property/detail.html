@@ -39,7 +39,7 @@
   {% comment %} Calculate price per square foot using the built-in widthratio tag {% endcomment %}
   {% widthratio property.price property.sqft 1 as price_per_sqft %}
   <h3 class="text-md font-light mb-6 text-gray-500">
-    {{ price_per_sqft|floatformat:"0"|intcomma }} kr/sq mt
+    {{ price_per_sqft|floatformat:"0"|intcomma }} kr/m²
   </h3>
   <hr class="my-6" />
 
@@ -81,7 +81,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="size-4 mr-2">
             <path d="M32 32C14.3 32 0 46.3 0 64l0 96c0 17.7 14.3 32 32 32s32-14.3 32-32l0-64 64 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 32zM64 352c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 96c0 17.7 14.3 32 32 32l96 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-64 0 0-64zM320 32c-17.7 0-32 14.3-32 32s14.3 32 32 32l64 0 0 64c0 17.7 14.3 32 32 32s32-14.3 32-32l0-96c0-17.7-14.3-32-32-32l-96 0zM448 352c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 64-64 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l96 0c17.7 0 32-14.3 32-32l0-96z"/>
           </svg>
-          <p class="text-gray-600"><strong>Size:</strong> {{ property.sqft }} sq mt</p>
+          <p class="text-gray-600"><strong>Size:</strong> {{ property.sqft }} m²</p>
         </div>
 
         <div class="flex items-center">
@@ -148,6 +148,45 @@
       </button>
     </form>
   {% endif %}
-
+  <hr class="my-6" />
+  {% if related_properties %}
+    <h2 class="my-6 text-2xl font-semibold">Other Properties in {{ property.zip_code }} {{ property.city }}</h2>
+    <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+      {% for property in related_properties %}
+      <a
+        href="{% url 'property:detail' property.id %}"
+        class="relative bg-white rounded-xl border shadow-sm hover:shadow-lg hover:-translate-y-1 transition"
+      >
+        {% if property.is_sold %}
+          <span
+            class="absolute top-3 left-3 bg-red-500 text-white text-md font-semibold px-2 py-0.5 rounded"
+            >Sold</span
+          >
+        {% endif %}
+        <img
+          src="{{ property.main_image.url }}"
+          alt="{{ property.title }}"
+          class="h-44 w-full object-cover rounded-t-xl"
+        />
+        <div class="p-4">
+          <h3 class="font-bold">{{ property.title }}</h3>
+          <h2 class="text-sm font-light mb-2 text-gray-500">
+            {{ property.address }}, {{ property.zip_code }} {{ property.city }}
+          </h2>
+          <hr class="my-2" />
+          <p class="font-semibold mb-4">{{ property.price|floatformat:"0"|intcomma }} kr</p>
+          <div class="flex flex-wrap gap-4 text-sm text-slate-500">
+            <span>{{ property.bedrooms }} Beds</span>
+            <span>{{ property.bathrooms }} Bathrooms</span>
+            <span>{{ property.sqft }} m²</span>
+          </div>
+        </div>
+      </a>
+        {% empty %}
+          <p>No properties found.</p>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
 </div>
 {% endblock %}

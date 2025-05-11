@@ -14,8 +14,22 @@ def property_list(request):
 
 
 def property_detail(request, id):
-    property_obj = get_object_or_404(Property, id=id)
-    return render(request, "property/detail.html", {"property": property_obj})
+    property_obj = get_object_or_404(Property, id=id, is_published=True)
+
+    # fetch other properties with the same zip code (excluding current)
+    related_properties = Property.objects.filter(
+        zip_code=property_obj.zip_code,
+        is_published=True
+    ).exclude(id=property_obj.id)
+
+    return render(
+        request,
+        "property/detail.html",
+        {
+            "property": property_obj,
+            "related_properties": related_properties
+        }
+    )
 
 
 @login_required
