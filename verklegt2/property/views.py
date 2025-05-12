@@ -4,8 +4,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 
-from .models import Property, PropertyImage
-from .forms import PropertyForm, EditPropertyForm
+from .models import Property, PropertyImage, PurchaseOffer
+from .forms import PropertyForm, EditPropertyForm, PurchaseOfferForm
 
 
 def property_list(request):
@@ -98,3 +98,50 @@ def edit_property(request, id):
         'form': form,
         'property': property
     })
+
+
+@login_required
+def make_offer(request, property_id):
+    property_obj = get_object_or_404(Property, pk=property_id)
+
+    if request.user.user_type != 'buyer':
+        return redirect('property:detail', property_id)
+
+    if request.method == 'POST':
+        form = PurchaseOfferForm(request.POST)
+        if form.is_valid():
+            offer = form.save(commit=False)
+            offer.property = property_obj
+            offer.buyer = request.user
+            offer.save()
+            return redirect('property:detail', property_id)
+    else:
+        form = PurchaseOfferForm()
+
+    return render(request, 'property/make_offer.html', {'form': form, 'property': property_obj})
+
+
+@login_required
+def accept_offer(request, offer_id):
+    offer = get_object_or_404(PurchaseOffer, id=offer_id, property__owner=request.user)
+
+    offer.status = 'accepted'
+    offer.save()
+
+    # Mark property as sold
+    property_obj = offer.property
+    property_obj.is_sold = True
+    property_obj.save()
+
+    # Decline other offers for this property
+    PurchaseOffer.objects.filter(property=property_obj).exclude(id=offer_id).update(status='declined')
+
+    return redirect('property:dashboard')
+
+
+@login_required
+def decline_offer(request, offer_id):
+    offer = get_object_or_404(PurchaseOffer, id=offer_id, property__owner=request.user)
+    offer.status = 'declined'
+    offer.save()
+    return redirect('property:dashboard')

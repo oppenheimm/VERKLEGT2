@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-
+from users.models import User
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -84,3 +84,22 @@ class PropertyImage(models.Model):
 
     def __str__(self):
         return f"Image for {self.property.title}"
+
+
+class PurchaseOffer(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('accepted', 'Accepted'),
+        ('declined', 'Declined'),
+    ]
+
+    property = models.ForeignKey('Property', on_delete=models.CASCADE, related_name='offers')
+    buyer = models.ForeignKey(User, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=12, decimal_places=2)
+    message = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expiration_date = models.DateTimeField(blank=True, null=True)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+
+    def __str__(self):
+        return f"Offer by {self.buyer.username} for {self.amount} kr on {self.property.title}"

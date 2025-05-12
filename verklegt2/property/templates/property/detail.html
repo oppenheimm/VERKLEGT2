@@ -38,9 +38,24 @@
   <h2 class="text-4xl font-semibold mb-4">{{ property.price|floatformat:"0"|intcomma }} kr.</h2>
   {% comment %} Calculate price per square foot using the built-in widthratio tag {% endcomment %}
   {% widthratio property.price property.sqft 1 as price_per_sqft %}
-  <h3 class="text-md font-light mb-6 text-gray-500">
+  <h3 class="text-md font-light mb-2 text-gray-500">
     {{ price_per_sqft|floatformat:"0"|intcomma }} kr/m²
   </h3>
+
+  
+  {% if user.is_authenticated and user.user_type == 'buyer'%}
+    {% if property.is_sold %}
+      <a class="inline-block mt-4 bg-green-600 text-white px-4 py-2 rounded opacity-50 cursor-not-allowed" aria-disabled="true">
+        Make a Purchasing Offer
+      </a>
+      <span class="text-md text-gray-500 mt-2 ml-2">This property is sold.</span>
+      {% else %}
+      <a href="{% url 'property:make_offer' property.id %}" class="inline-block mt-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+        Make a Purchasing Offer
+      </a>
+    {% endif %}
+  {% endif %}
+
   <hr class="my-6" />
 
   <!-- Property details -->

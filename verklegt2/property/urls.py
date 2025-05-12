@@ -13,6 +13,9 @@ urlpatterns = [
     path("<int:id>/delete/", views.property_delete, name="delete"),
     path('<int:pk>/toggle-sold/', views.toggle_property_sold, name='toggle_property_sold'),
     path('<int:id>/edit/', views.edit_property, name='edit'),
+    path('<int:property_id>/make-offer/', views.make_offer, name='make_offer'),
+    path('offer/<int:offer_id>/accept/', views.accept_offer, name='accept_offer'),
+    path('offer/<int:offer_id>/decline/', views.decline_offer, name='decline_offer'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

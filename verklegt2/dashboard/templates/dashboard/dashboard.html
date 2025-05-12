@@ -1,4 +1,5 @@
 {% extends "base.html" %} 
+{% load humanize %}
 
 {% block title %}
 My Listings
@@ -7,6 +8,8 @@ My Listings
 {% block content %}
 <div class="max-w-4xl mx-auto px-4 py-8">
   <h1 class="text-2xl font-semibold mb-6">My Properties</h1>
+
+  <a href="{% url 'property:create' %}" class="text-blue-500 underline mb-4 inline-block">Add a new Property +</a>
 
   {% if properties %}
   <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -27,7 +30,7 @@ My Listings
           {{ property.title }}
         </h2>
         <p class="text-sm text-gray-500">{{ property.city }}</p>
-        <p class="mt-2 font-semibold">${{ property.price|floatformat:"2" }}</p>
+        <p class="mt-2 font-semibold">{{ property.price|floatformat:"0"|intcomma }} kr.</p>
         {% if property.is_sold %}
         <span
           class="inline-block mt-2 px-2 py-1 text-xs font-semibold bg-red-100 text-red-700 rounded"
@@ -41,5 +44,41 @@ My Listings
   {% else %}
   <p>You haven’t listed any properties yet.</p>
   {% endif %}
+
+  <hr class="my-10">
+
+  <h2 class="text-2xl font-semibold mb-6">Purchase Offers</h2>
+  {% if offers %}
+    <div class="space-y-4">
+      {% for offer in offers %}
+        <div class="p-4 bg-white shadow rounded">
+          <p><strong>Property:</strong> {{ offer.property.title }}</p>
+          <p><strong>Buyer:</strong> {{ offer.buyer.username }}</p>
+          <p><strong>Amount:</strong> {{ offer.amount|floatformat:"2" }} kr</p>
+          {% if offer.message %}
+          <p><strong>Message:</strong> {{ offer.message }}</p>
+          {% endif %}
+          <p class="text-sm text-gray-500">Submitted on {{ offer.created_at|date:"F j, Y, g:i a" }}</p>
+          <p class="mt-2"><strong>Status:</strong> {{ offer.get_status_display }}</p>
+
+          {% if offer.status == 'pending' %}
+            <div class="mt-2 flex gap-2">
+              <form method="POST" action="{% url 'property:accept_offer' offer.id %}">
+                {% csrf_token %}
+                <button type="submit" class="bg-green-600 text-white px-3 py-1 rounded">Accept</button>
+              </form>
+              <form method="POST" action="{% url 'property:decline_offer' offer.id %}">
+                {% csrf_token %}
+                <button type="submit" class="bg-red-600 text-white px-3 py-1 rounded">Decline</button>
+              </form>
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>No one has made any offers on your properties yet.</p>
+  {% endif %}
+
 </div>
 {% endblock %}

@@ -1,6 +1,6 @@
 # property/forms.py
 from django import forms
-from .models import Property, PropertyImage
+from .models import Property, PropertyImage, PurchaseOffer
 from django.utils.safestring import mark_safe
 
 
@@ -52,3 +52,36 @@ class EditPropertyForm(forms.ModelForm):
                 field.field.widget.attrs.update({
                     'class': 'w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500'
                 })
+
+
+class PurchaseOfferForm(forms.ModelForm):
+    amount = forms.DecimalField(
+        required=True,
+        widget=forms.NumberInput(attrs={
+            'class': 'w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4',
+            'placeholder': 'Offer Amount'
+        }),
+        label=mark_safe("Offer Amount <span class='text-sm text-gray-500'>(in ISK)</span>")
+    )
+    message = forms.CharField(
+        required=True,
+        widget=forms.Textarea(attrs={
+            'class': 'w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4',
+            'placeholder': 'Your Message'
+        }),
+        label=mark_safe("Message <span class='text-sm text-gray-500'>(required)</span>")
+    )
+    
+    expiration_date = forms.DateField(
+        required=False,
+        widget=forms.DateInput(attrs={
+            'class': 'w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4',
+            'placeholder': 'Expiration Date (YYYY-MM-DD)'
+        }),
+        label=mark_safe("Expiration Date <span class='text-sm text-gray-500'>(optional)</span>")
+    )
+    
+    class Meta:
+        model = PurchaseOffer
+        fields = ['amount', 'message', 'expiration_date']
+            

@@ -1,14 +1,13 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from property.models import Property
-
+from property.models import Property, PurchaseOffer
 
 @login_required
 def dashboard(request):
-    """Display all active properties belonging to the current user."""
-    properties = (
-        Property.objects.filter(owner=request.user)
-        .select_related("category")
-        .order_by("-created_at")
-    )
-    return render(request, "dashboard/dashboard.html", {"properties": properties})
+    properties = Property.objects.filter(owner=request.user)
+    offers = PurchaseOffer.objects.filter(property__in=properties).select_related('property', 'buyer')
+
+    return render(request, 'dashboard/dashboard.html', {
+        'properties': properties,
+        'offers': offers,
+    })
