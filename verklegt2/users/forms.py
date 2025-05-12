@@ -100,6 +100,14 @@ class SignUpForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = User
         fields = ('username', 'name', 'email', 'user_type', 'phone', 'company_name', 'password1', 'password2')
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Filter out 'admin' from user_type choices
+        self.fields['user_type'].choices = [
+            (key, label) for key, label in User.USER_TYPE_CHOICES if key != 'admin'
+        ]
 
     def clean(self):
         cleaned = super().clean()
