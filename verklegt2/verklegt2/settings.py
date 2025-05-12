@@ -27,9 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-LOGIN_URL = 'users:login'
-LOGIN_REDIRECT_URL = '/'       # where to send users after login
-LOGOUT_REDIRECT_URL = 'users:login'
+LOGIN_URL = "users:login"
+LOGIN_REDIRECT_URL = "/"  # where to send users after login
+LOGOUT_REDIRECT_URL = "users:login"
 
 # Application definition
 
@@ -42,11 +42,11 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "dashboard",
     "core",
-    'users.apps.UsersConfig',  
+    "users.apps.UsersConfig",
     "property",
     "crispy_forms",
     "crispy_tailwind",
-    'django.contrib.humanize',
+    "django.contrib.humanize",
 ]
 
 MIDDLEWARE = [
@@ -84,8 +84,12 @@ WSGI_APPLICATION = "verklegt2.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": "verklegt_namskeid_db",
+        "USER": "verklegt_db_user",
+        "PASSWORD": "QIfb2tKcUeshbYiD0B91NGDP",
+        "HOST": "db-verklegt-namskeid-ii-eu-59op2p.postgres.database.azure.com",
+        "PORT": "5432",
     }
 }
 
@@ -138,4 +142,4 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 CRISPY_TEMPLATE_PACK = "tailwind"
 
 # Custom user model
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = "users.User"
