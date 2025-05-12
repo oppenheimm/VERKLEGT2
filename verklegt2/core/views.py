@@ -5,13 +5,16 @@ from django.contrib.auth import logout
 
 
 def index(request):
-    properties = Property.objects.filter(is_published=True)[:6]
-    categories = Category.objects.all()
-    context = {
-        "featured_properties": properties,
-        "categories": categories,
-    }
-    return render(request, "core/index.html", context)
+    featured_properties = Property.objects.filter(is_published=True)[:6]
+
+    all_types = sorted(set(Property.objects.values_list('type', flat=True)))
+    all_cities = sorted(set(Property.objects.values_list('city', flat=True)))
+
+    return render(request, 'core/index.html', {
+        'featured_properties': featured_properties,
+        'all_types': all_types,
+        'all_cities': all_cities,
+    })
 
 
 def contact(request):

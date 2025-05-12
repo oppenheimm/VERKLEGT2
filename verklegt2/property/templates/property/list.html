@@ -24,8 +24,8 @@
     </button>
   </div>
 
-  <!-- FILTER FORM (initially hidden) -->
-  <div id="filterMenu" class="hidden mb-6">
+  <!-- FILTER FORM (initially hidden unless filters applied) -->
+  <div id="filterMenu" class="mb-6 {% if request.GET %}{% else %}hidden{% endif %}">
     <hr class="my-6" />
     <form method="get" class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
@@ -44,7 +44,7 @@
         <select name="type" class="border p-2 rounded w-full">
           <option value="">All Types</option>
           {% for t in all_types %}
-            <option value="{{ t }}" {% if selected_type == t %}selected{% endif %}>{{ t|title }}</option>
+            <option value="{{ t }}" {% if request.GET.type == t %}selected{% endif %}>{{ t|title }}</option>
           {% endfor %}
         </select>
       </div>
@@ -64,7 +64,7 @@
         <select name="city" class="border p-2 rounded w-full">
           <option value="">All Cities</option>
           {% for city in all_cities %}
-            <option value="{{ city }}" {% if selected_city == city %}selected{% endif %}>{{ city }}</option>
+            <option value="{{ city }}" {% if request.GET.city == city %}selected{% endif %}>{{ city }}</option>
           {% endfor %}
         </select>
       </div>      
@@ -76,12 +76,20 @@
 
       <div>
         <label class="block text-sm font-medium mb-1">Min Price</label>
-        <input type="number" name="min_price" placeholder="Min Price" value="{{ request.GET.min_price }}" class="border p-2 rounded w-full" />
+        <input type="text" name="min_price" placeholder="Min Price"
+               value="{{ request.GET.min_price|default_if_none:'' }}"
+               class="border p-2 rounded w-full"
+               oninput="unformatAndSetRawValue(this)"
+               onblur="this.value = formatPrice(this.value)" />
       </div>
 
       <div>
         <label class="block text-sm font-medium mb-1">Max Price</label>
-        <input type="number" name="max_price" placeholder="Max Price" value="{{ request.GET.max_price }}" class="border p-2 rounded w-full" />
+        <input type="text" name="max_price" placeholder="Max Price"
+               value="{{ request.GET.max_price|default_if_none:'' }}"
+               class="border p-2 rounded w-full"
+               oninput="unformatAndSetRawValue(this)"
+               onblur="this.value = formatPrice(this.value)" />
       </div>
 
       <div>
@@ -108,15 +116,15 @@
         <label class="text-sm font-medium">Include Sold Properties</label>
       </div>
 
-      <div class="mt-6">
+      <div class="flex gap-6 mt-6">
         <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded w-full">Apply Filters</button>
+        <a href="{% url 'property:list' %}?openFilters=1" class="bg-gray-600 text-white px-4 py-2 rounded w-full text-center">Reset Filters</a>
       </div>
     </form>
     <hr class="my-6" />
   </div>
 
   <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-    <!-- You can loop over properties dynamically with Django later -->
     {% for property in properties %}
     <a
       href="{% url 'property:detail' property.id %}"
@@ -125,8 +133,7 @@
       {% if property.is_sold %}
       <span
         class="absolute top-3 left-3 bg-red-500 text-white text-md font-semibold px-2 py-0.5 rounded"
-        >Sold</span
-      >
+        >Sold</span>
       {% endif %}
       <img
         src="{{ property.main_image.url }}"
@@ -160,5 +167,30 @@
     const filterMenu = document.getElementById("filterMenu");
     filterMenu.classList.toggle("hidden");
   }
+  function toggleFilters() {
+    const filterMenu = document.getElementById("filterMenu");
+    filterMenu.classList.toggle("hidden");
+  }
+
+  function formatPrice(value) {
+    const raw = value.replace(/\D/g, '');
+    const num = parseInt(raw, 10);
+    if (!isNaN(num)) {
+      return num.toLocaleString('de-DE'); // e.g. 1.000.000
+    }
+    return value;
+  }
+
+  function unformatAndSetRawValue(input) {
+    input.value = input.value.replace(/\./g, '').replace(/[^\d]/g, '');
+  }
+
+  // On page load, format prices visually
+  window.addEventListener("DOMContentLoaded", () => {
+    const min = document.querySelector("input[name='min_price']");
+    const max = document.querySelector("input[name='max_price']");
+    if (min && min.value) min.value = formatPrice(min.value);
+    if (max && max.value) max.value = formatPrice(max.value);
+  });
 </script>
 {% endblock %}
