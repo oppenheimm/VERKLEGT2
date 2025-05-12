@@ -61,7 +61,7 @@
 
         {% if request.user.is_authenticated %}
         <div class="flex gap-4 items-center">
-          <a href="#" class="relative">
+          <a href="{% url 'dashboard:notifications' %}" class="relative">
             <!-- Notification Icon -->
             <svg
               xmlns="http://www.w3.org/2000/svg"

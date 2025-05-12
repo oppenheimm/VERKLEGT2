@@ -136,7 +136,7 @@ def accept_offer(request, offer_id):
     # Decline other offers for this property
     PurchaseOffer.objects.filter(property=property_obj).exclude(id=offer_id).update(status='declined')
 
-    return redirect('property:dashboard')
+    return redirect('dashboard:dashboard')
 
 
 @login_required
@@ -144,4 +144,4 @@ def decline_offer(request, offer_id):
     offer = get_object_or_404(PurchaseOffer, id=offer_id, property__owner=request.user)
     offer.status = 'declined'
     offer.save()
-    return redirect('property:dashboard')
+    return redirect('dashboard:dashboard')

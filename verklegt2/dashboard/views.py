@@ -11,3 +11,21 @@ def dashboard(request):
         'properties': properties,
         'offers': offers,
     })
+
+
+@login_required
+def notifications(request):
+    user = request.user
+    owner_offers = []
+    buyer_offers = []
+
+    if user.user_type == 'agency_seller' or user.user_type == 'individual_seller':
+        owner_offers = PurchaseOffer.objects.filter(property__owner=user).select_related('property', 'buyer')
+
+    if user.user_type == 'buyer':
+        buyer_offers = PurchaseOffer.objects.filter(buyer=user).select_related('property')
+
+    return render(request, 'dashboard/notifications.html', {
+        'owner_offers': owner_offers,
+        'buyer_offers': buyer_offers,
+    })
