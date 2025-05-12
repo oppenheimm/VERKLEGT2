@@ -25,6 +25,7 @@ class User(AbstractUser):
       - user_type (buyer, individual_seller, agency_seller)
     """
     # User types
+    ADMIN = 'admin'
     BUYER = 'buyer'
     INDIVIDUAL_SELLER = 'individual_seller'
     AGENCY_SELLER = 'agency_seller'
