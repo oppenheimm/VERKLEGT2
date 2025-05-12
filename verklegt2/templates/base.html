@@ -42,7 +42,7 @@
 
   <body class="font-sans antialiased text-slate-900">
     <!-- Header -->
-    <header class="bg-brand-light mb-6">
+    <header class="bg-brand-light">
       <div
         class="container mx-auto max-w-7xl px-6 py-6 flex items-center justify-between w-full"
       >
@@ -99,20 +99,23 @@
             </svg>
           </a>
           {% if request.user.user_type == 'individual_seller' or request.user.user_type == 'agency_seller' %}
-                <a href="{% url 'dashboard:dashboard' %}">
-                <!-- Dashboard Icon -->
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-8 w-8 text-gray-700 hover:text-brand transition"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M3 3h7v7H3V3zm0 11h7v7H3v-7zm11-11h7v7h-7V3zm0 11h7v7h-7v-7z"
-                  />
-                </svg>
-                </a>
+          <a href="{% url 'dashboard:dashboard' %}">
+            <!-- Dashboard Icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-8 w-8 text-gray-700 hover:text-brand transition"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 3h7v7H3V3zm0 11h7v7H3v-7zm11-11h7v7h-7V3zm0 11h7v7h-7v-7z"
+              />
+            </svg>
+          </a>
           {% endif %}
         </div>
         {% else %}
@@ -214,20 +217,28 @@
 
       <!-- Footer Links (3 columns) -->
       <div class="max-w-4xl mx-auto">
-        <div class="container mx-auto max-w-7xl px-6 grid grid-cols-1 md:grid-cols-3 gap-10 py-12">
+        <div
+          class="container mx-auto max-w-7xl px-6 grid grid-cols-1 md:grid-cols-3 gap-10 py-12"
+        >
           <!-- Column 1: Sell a Home + Buy a Home -->
           <div>
             <div class="mb-8">
-              <h3 class="text-sm font-semibold text-gray-900 mb-4">SELL A HOME</h3>
+              <h3 class="text-sm font-semibold text-gray-900 mb-4">
+                SELL A HOME
+              </h3>
               <ul class="space-y-2 text-sm text-gray-700">
-                <li><a href="#" class="hover:text-gray-900">Request an offer</a></li>
+                <li>
+                  <a href="#" class="hover:text-gray-900">Request an offer</a>
+                </li>
                 <li><a href="#" class="hover:text-gray-900">Pricing</a></li>
                 <li><a href="#" class="hover:text-gray-900">Reviews</a></li>
                 <li><a href="#" class="hover:text-gray-900">Stories</a></li>
               </ul>
             </div>
             <div>
-              <h3 class="text-sm font-semibold text-gray-900 mb-4">BUY A HOME</h3>
+              <h3 class="text-sm font-semibold text-gray-900 mb-4">
+                BUY A HOME
+              </h3>
               <ul class="space-y-2 text-sm text-gray-700">
                 <li><a href="#" class="hover:text-gray-900">Buy</a></li>
                 <li><a href="#" class="hover:text-gray-900">Finance</a></li>
@@ -238,19 +249,35 @@
           <!-- Column 2: Buy, Rent and Sell + Terms & Privacy -->
           <div>
             <div class="mb-8">
-              <h3 class="text-sm font-semibold text-gray-900 mb-4">BUY, RENT AND SELL</h3>
+              <h3 class="text-sm font-semibold text-gray-900 mb-4">
+                BUY, RENT AND SELL
+              </h3>
               <ul class="space-y-2 text-sm text-gray-700">
-                <li><a href="#" class="hover:text-gray-900">Buy and sell properties</a></li>
+                <li>
+                  <a href="#" class="hover:text-gray-900"
+                    >Buy and sell properties</a
+                  >
+                </li>
                 <li><a href="#" class="hover:text-gray-900">Rent home</a></li>
-                <li><a href="#" class="hover:text-gray-900">Builder trade-up</a></li>
+                <li>
+                  <a href="#" class="hover:text-gray-900">Builder trade-up</a>
+                </li>
               </ul>
             </div>
             <div>
-              <h3 class="text-sm font-semibold text-gray-900 mb-4">TERMS &amp; PRIVACY</h3>
+              <h3 class="text-sm font-semibold text-gray-900 mb-4">
+                TERMS &amp; PRIVACY
+              </h3>
               <ul class="space-y-2 text-sm text-gray-700">
-                <li><a href="#" class="hover:text-gray-900">Trust &amp; Safety</a></li>
-                <li><a href="#" class="hover:text-gray-900">Terms of Service</a></li>
-                <li><a href="#" class="hover:text-gray-900">Privacy Policy</a></li>
+                <li>
+                  <a href="#" class="hover:text-gray-900">Trust &amp; Safety</a>
+                </li>
+                <li>
+                  <a href="#" class="hover:text-gray-900">Terms of Service</a>
+                </li>
+                <li>
+                  <a href="#" class="hover:text-gray-900">Privacy Policy</a>
+                </li>
               </ul>
             </div>
           </div>
@@ -261,13 +288,17 @@
               <h3 class="text-sm font-semibold text-gray-900 mb-4">ABOUT</h3>
               <ul class="space-y-2 text-sm text-gray-700">
                 <li><a href="#" class="hover:text-gray-900">Company</a></li>
-                <li><a href="#" class="hover:text-gray-900">How it works</a></li>
+                <li>
+                  <a href="#" class="hover:text-gray-900">How it works</a>
+                </li>
                 <li><a href="#" class="hover:text-gray-900">Contact</a></li>
                 <li><a href="#" class="hover:text-gray-900">Investors</a></li>
               </ul>
             </div>
             <div>
-              <h3 class="text-sm font-semibold text-gray-900 mb-4">RESOURCES</h3>
+              <h3 class="text-sm font-semibold text-gray-900 mb-4">
+                RESOURCES
+              </h3>
               <ul class="space-y-2 text-sm text-gray-700">
                 <li><a href="#" class="hover:text-gray-900">Blog</a></li>
                 <li><a href="#" class="hover:text-gray-900">Guides</a></li>
@@ -276,19 +307,30 @@
               </ul>
             </div>
           </div>
-        </div>  <!-- /grid -->
+        </div>
+        <!-- /grid -->
 
         <div class="space-x-3 mt-8">
           {% if request.user.is_authenticated %}
-            <a href="" class="text-sm hover:text-gray-900">Inbox</a>
-            <a href="{% url 'dashboard:dashboard' %}" class="text-sm hover:text-gray-900">Dashboard</a>
-            <form method="post" action="{% url 'users:logout' %}" class="inline">
-              {% csrf_token %}
-              <button type="submit" class="text-sm hover:text-gray-900">Log Out</button>
-            </form>
+          <a href="" class="text-sm hover:text-gray-900">Inbox</a>
+          <a
+            href="{% url 'dashboard:dashboard' %}"
+            class="text-sm hover:text-gray-900"
+            >Dashboard</a
+          >
+          <form method="post" action="{% url 'users:logout' %}" class="inline">
+            {% csrf_token %}
+            <button type="submit" class="text-sm hover:text-gray-900">
+              Log Out
+            </button>
+          </form>
           {% else %}
-            <a href="{% url 'users:signup' %}" class="text-sm hover:text-gray-900">Sign up</a>
-            <a href="{% url 'users:login' %}" class="text-sm hover:text-gray-900">Log in</a>
+          <a href="{% url 'users:signup' %}" class="text-sm hover:text-gray-900"
+            >Sign up</a
+          >
+          <a href="{% url 'users:login' %}" class="text-sm hover:text-gray-900"
+            >Log in</a
+          >
           {% endif %}
         </div>
       </div>

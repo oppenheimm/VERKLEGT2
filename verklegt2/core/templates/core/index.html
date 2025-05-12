@@ -1,149 +1,153 @@
 {% extends "base.html" %} {% load humanize %} {% block title %}Castle Apartments
 | Home{% endblock %} {% block content %}
 <!-- Hero -->
-<section class="container mx-auto max-w-7xl px-6">
-  <div
-    class="bg-brand-light rounded-3xl p-10 grid md:grid-cols-2 gap-10 items-center py-20"
-    style="
-      background-image: url('/media/item_images/castle_no_bg.png');
-      background-size: 40%;
-      background-position: right;
-      background-repeat: no-repeat;
-    "
-  >
-    <!-- Hero text -->
-    <div class="pl-6">
-      <h1 class="text-4xl lg:text-5xl font-extrabold mb-4 leading-tight">
-        Easy way to find a perfect property
-      </h1>
-      <p class="text-slate-600 mb-8 max-w-sm">
-        We provide a complete service for the sale, purchase or rental of real
-        estate.
-      </p>
+<div class="bg-gradient-to-b from-blue-100 to-white min-h-screen pt-6">
 
-      <!-- Search box -->
-      <form
-        action="{% url 'property:list' %}"
-        method="get"
-        class="flex flex-col sm:flex-row gap-4 bg-white px-4 py-3 rounded-xl shadow-lg max-w-xl text-xs"
-      >
-        <!-- City -->
-        <select
-          name="city"
-          class="flex-1 appearance-none bg-transparent focus:outline-none"
-        >
-          <option value="">Select Your City</option>
-          {% for city in all_cities %}
-          <option value="{{ city }}">{{ city }}</option>
-          {% endfor %}
-        </select>
-
-        <span class="hidden sm:block w-px bg-slate-200"></span>
-
-        <!-- Type -->
-        <select
-          name="type"
-          class="flex-1 appearance-none bg-transparent focus:outline-none"
-        >
-          <option value="">Choose Property Type</option>
-          {% for t in all_types %}
-          <option value="{{ t }}">{{ t|title }}</option>
-          {% endfor %}
-        </select>
-
-        <span class="hidden sm:block w-px bg-slate-200"></span>
-
-        <!-- Price range (uses fixed ranges) -->
-        <select
-          name="price_range"
-          class="flex-1 appearance-none bg-transparent focus:outline-none"
-          onchange="updatePriceFilters(this)"
-        >
-          <option value="">Choose Price Range</option>
-          <option value="0-50000000">0 - 50M</option>
-          <option value="50000000-100000000">50M - 100M</option>
-          <option value="100000000-150000000">100M - 150M</option>
-          <option value="150000000-200000000">150M - 200M</option>
-          <option value="200000000-250000000">200M - 250M</option>
-          <option value="250000000-300000000">250M - 300M</option>
-          <option value="300000000-">300M+</option>
-        </select>
-
-        <!-- Hidden fields that actually get submitted -->
-        <input type="hidden" name="min_price" id="min_price_input" />
-        <input type="hidden" name="max_price" id="max_price_input" />
-
-        <button
-          type="submit"
-          class="shrink-0 w-11 h-11 grid place-items-center rounded-lg bg-brand text-white"
-        >
-          🔍
-        </button>
-      </form>
-    </div>
-  </div>
-</section>
-
-<!-- Location cards -->
-<section class="container mx-auto max-w-7xl px-6 mt-20">
-  <h2 class="text-3xl font-bold text-center mb-2">Based on your location</h2>
-  <p class="text-center text-slate-500 mb-10">
-    Some of our picked properties near you.
-  </p>
-
-  <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-    <!-- You can loop over properties dynamically with Django later -->
-    {% for property in featured_properties %}
-    <a
-      href="{% url 'property:detail' property.id %}"
-      class="relative bg-white rounded-xl border shadow-sm hover:shadow-lg hover:-translate-y-1 transition"
+  <section class="container mx-auto max-w-7xl px-6">
+    <div
+      class="bg-brand-light rounded-3xl p-10 grid md:grid-cols-2 gap-10 items-center py-20"
+      style="
+        background-image: url('/media/item_images/castle_no_bg.png');
+        background-size: 40%;
+        background-position: right;
+        background-repeat: no-repeat;
+      "
     >
-      {% if property.is_sold %}
-      <span
-        class="absolute top-3 left-3 bg-red-500 text-white text-md font-semibold px-2 py-0.5 rounded"
-        >Sold</span
-      >
-      {% endif %}
-      <img
-        src="{{ property.main_image.url }}"
-        alt="{{ property.title }}"
-        class="h-44 w-full object-cover rounded-t-xl"
-      />
-      <div class="p-4">
-        <h3 class="font-bold">{{ property.title }}</h3>
-        <h2 class="text-sm font-light mb-2 text-gray-500">
-          {{ property.address }}, {{ property.zip_code }} {{ property.city }}
-        </h2>
-        <hr class="my-2" />
-        <p class="font-semibold mb-4">
-          {{ property.price|floatformat:"0"|intcomma }} kr
+      <!-- Hero text -->
+      <div class="pl-6">
+        <h1 class="text-4xl lg:text-5xl font-extrabold mb-4 leading-tight">
+          Easy way to find a perfect property
+        </h1>
+        <p class="text-slate-600 mb-8 max-w-sm">
+          We provide a complete service for the sale, purchase or rental of real
+          estate.
         </p>
-        <div class="flex flex-wrap gap-4 text-sm text-slate-500">
-          <span>{{ property.bedrooms }} Beds</span>
-          <span>{{ property.bathrooms }} Bathrooms</span>
-          <span>{{ property.sqft }} m²</span>
-        </div>
+
+        <!-- Search box -->
+        <form
+          action="{% url 'property:list' %}"
+          method="get"
+          class="flex flex-col sm:flex-row gap-4 bg-white px-4 py-3 rounded-xl shadow-lg max-w-xl text-xs"
+        >
+          <!-- City -->
+          <select
+            name="city"
+            class="flex-1 appearance-none bg-transparent focus:outline-none"
+          >
+            <option value="">Select Your City</option>
+            {% for city in all_cities %}
+            <option value="{{ city }}">{{ city }}</option>
+            {% endfor %}
+          </select>
+
+          <span class="hidden sm:block w-px bg-slate-200"></span>
+
+          <!-- Type -->
+          <select
+            name="type"
+            class="flex-1 appearance-none bg-transparent focus:outline-none"
+          >
+            <option value="">Choose Property Type</option>
+            {% for t in all_types %}
+            <option value="{{ t }}">{{ t|title }}</option>
+            {% endfor %}
+          </select>
+
+          <span class="hidden sm:block w-px bg-slate-200"></span>
+
+          <!-- Price range (uses fixed ranges) -->
+          <select
+            name="price_range"
+            class="flex-1 appearance-none bg-transparent focus:outline-none"
+            onchange="updatePriceFilters(this)"
+          >
+            <option value="">Choose Price Range</option>
+            <option value="0-50000000">0 - 50M</option>
+            <option value="50000000-100000000">50M - 100M</option>
+            <option value="100000000-150000000">100M - 150M</option>
+            <option value="150000000-200000000">150M - 200M</option>
+            <option value="200000000-250000000">200M - 250M</option>
+            <option value="250000000-300000000">250M - 300M</option>
+            <option value="300000000-">300M+</option>
+          </select>
+
+          <!-- Hidden fields that actually get submitted -->
+          <input type="hidden" name="min_price" id="min_price_input" />
+          <input type="hidden" name="max_price" id="max_price_input" />
+
+          <button
+            type="submit"
+            class="shrink-0 w-11 h-11 grid place-items-center rounded-lg bg-brand text-white"
+          >
+            🔍
+          </button>
+        </form>
       </div>
-    </a>
-    {% endfor %}
-  </div>
+    </div>
+  </section>
 
-  <div class="text-center mt-10">
-    <a href="{% url 'property:list' %}">
-      <button
-        class="px-6 py-3 rounded-lg bg-brand text-white font-semibold hover:opacity-90 transition"
+  <!-- Location cards -->
+  <section class="container mx-auto max-w-7xl px-6 mt-20">
+    <h2 class="text-3xl font-bold text-center mb-2">Based on your location</h2>
+    <p class="text-center text-slate-500 mb-10">
+      Some of our picked properties near you.
+    </p>
+
+    <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+      <!-- You can loop over properties dynamically with Django later -->
+      {% for property in featured_properties %}
+      <a
+        href="{% url 'property:detail' property.id %}"
+        class="relative bg-white rounded-xl border shadow-sm hover:shadow-lg hover:-translate-y-1 transition"
       >
-        Browse more properties
-      </button>
-    </a>
-  </div>
-</section>
+        {% if property.is_sold %}
+        <span
+          class="absolute top-3 left-3 bg-red-500 text-white text-md font-semibold px-2 py-0.5 rounded"
+          >Sold</span
+        >
+        {% endif %}
+        <img
+          src="{{ property.main_image.url }}"
+          alt="{{ property.title }}"
+          class="h-44 w-full object-cover rounded-t-xl"
+        />
+        <div class="p-4">
+          <h3 class="font-bold">{{ property.title }}</h3>
+          <h2 class="text-sm font-light mb-2 text-gray-500">
+            {{ property.address }}, {{ property.zip_code }} {{ property.city }}
+          </h2>
+          <hr class="my-2" />
+          <p class="font-semibold mb-4">
+            {{ property.price|floatformat:"0"|intcomma }} kr
+          </p>
+          <div class="flex flex-wrap gap-4 text-sm text-slate-500">
+            <span>{{ property.bedrooms }} Beds</span>
+            <span>{{ property.bathrooms }} Bathrooms</span>
+            <span>{{ property.sqft }} m²</span>
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
 
-<script>
-  function updatePriceFilters(select) {
-    const [min, max] = select.value.split("-");
-    document.getElementById("min_price_input").value = min || "";
-    document.getElementById("max_price_input").value = max || "";
-  }
-</script>
-{% endblock %}
+    <div class="text-center mt-10">
+      <a href="{% url 'property:list' %}">
+        <button
+          class="px-6 py-3 rounded-lg bg-brand text-white font-semibold hover:opacity-90 transition"
+        >
+          Browse more properties
+        </button>
+      </a>
+    </div>
+  </section>
+</div>
+
+  <script>
+    function updatePriceFilters(select) {
+      const [min, max] = select.value.split("-");
+      document.getElementById("min_price_input").value = min || "";
+      document.getElementById("max_price_input").value = max || "";
+    }
+  </script>
+  {% endblock %}
+</body>
