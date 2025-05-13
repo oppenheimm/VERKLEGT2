@@ -1,0 +1,70 @@
+{% extends "payment_base.html" %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-8 flex pb-20">
+  <!-- Left side -->
+  <div class="w-1/2 flex flex-col items-center justify-center border-r border-gray-200 bg-white">
+    <div class="text-center">
+      <div class="text-6xl mb-4">🏰</div>
+      <h1 class="text-2xl font-bold text-green-900">Payment gateway</h1>
+    </div>
+    <div class="absolute bottom-4 text-sm text-gray-500">
+      © 2024. All Rights Reserved. Made by <span class="font-semibold text-blue-800">Castle Apartments</span>
+    </div>
+  </div>
+
+  <!-- Right side -->
+  <div class="w-1/2 px-16 py-10 flex flex-col bg-white">
+    <div>
+      <h2 class="text-2xl font-bold mb-8">Complete Property Purchase</h2>
+
+      <!-- Personal Details -->
+      <div class="mb-6">
+        <h3 class="font-semibold mb-4">Personal details</h3>
+        <div class="grid grid-cols-2 gap-4">
+          <input type="text" placeholder="P.o.Box 1223" class="border rounded-md px-4 py-2 w-full" />
+          <input type="text" placeholder="Iceland" class="border rounded-md px-4 py-2 w-full" />
+          <input type="text" placeholder="Arusha" class="border rounded-md px-4 py-2 w-full" />
+          <input type="text" placeholder="9090" class="border rounded-md px-4 py-2 w-full" />
+        </div>
+      </div>
+
+      <!-- Payment Methods -->
+      <div class="mb-6">
+        <h3 class="font-semibold mb-4">Payment methods</h3>
+        <div class="flex gap-4">
+          <img src="https://img.icons8.com/color/48/000000/visa.png" class="h-8" />
+          <img src="https://img.icons8.com/color/48/000000/stripe.png" class="h-8" />
+          <img src="https://img.icons8.com/color/48/000000/paypal.png" class="h-8" />
+          <img src="https://img.icons8.com/color/48/000000/mastercard.png" class="h-8" />
+          <img src="https://img.icons8.com/color/48/000000/google-pay-india.png" class="h-8" />
+        </div>
+      </div>
+
+      <!-- Card Details -->
+      <div class="mb-6">
+        <h3 class="font-semibold mb-4">Card details</h3>
+        <input type="text" placeholder="Seen on your card" class="border rounded-md px-4 py-2 w-full mb-4" />
+        <input type="text" placeholder="Seen on your card" class="border rounded-md px-4 py-2 w-full mb-4" />
+        <div class="grid grid-cols-2 gap-4">
+          <input type="text" placeholder="20/23" class="border rounded-md px-4 py-2 w-full" />
+          <input type="text" placeholder="654" class="border rounded-md px-4 py-2 w-full" />
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <button class="w-full bg-indigo-900 text-white font-semibold py-3 rounded-md hover:bg-indigo-800 transition">
+        Next
+      </button>
+    </div>
+
+    <!-- Footer Links -->
+    <div class="flex justify-center gap-6 text-sm text-gray-500 absolute bottom-4">
+      <a href="#" class="hover:text-gray-700">Instructions</a>
+      <a href="#" class="hover:text-gray-700">License</a>
+      <a href="#" class="hover:text-gray-700">Terms of Use</a>
+      <a href="#" class="hover:text-gray-700">Privacy</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
