@@ -34,5 +34,6 @@ urlpatterns = [
         "dashboard/",
         include(("dashboard.urls", "dashboard"), namespace="dashboard"),
     ),
+    path("payment/", include("payment.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 """bara fyrir procuction + """

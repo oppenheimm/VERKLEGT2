@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "crispy_forms",
     "crispy_tailwind",
     "django.contrib.humanize",
+    "payment",
 ]
 
 MIDDLEWARE = [
