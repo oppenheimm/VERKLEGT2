@@ -24,6 +24,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from core.views import index
+from core.views import serve_db_file
 
 urlpatterns = [
     path("", include("core.urls")),
@@ -35,5 +36,6 @@ urlpatterns = [
         include(("dashboard.urls", "dashboard"), namespace="dashboard"),
     ),
     path("payment/", include("payment.urls")),
+    path("db-files/<path:file_path>", serve_db_file, name="db_file"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 """bara fyrir procuction + """

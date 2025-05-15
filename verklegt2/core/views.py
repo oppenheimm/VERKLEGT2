@@ -19,3 +19,25 @@ def index(request):
 
 def contact(request):
     return render(request, "core/contact.html")
+
+import mimetypes
+from django.apps import apps
+from django.http import Http404, HttpResponse
+from django.utils.encoding import smart_str
+
+
+def serve_db_file(request, file_path: str):
+    """
+    Stream a FileBlob to the browser.
+    URL pattern:  /db-files/<path:file_path>
+    """
+    FileBlob = apps.get_model("core", "FileBlob")
+    try:
+        blob = FileBlob.objects.get(path=file_path)
+    except FileBlob.DoesNotExist:
+        raise Http404(f"{file_path!r} not found in FileBlob")
+
+    content_type, _ = mimetypes.guess_type(blob.path)
+    response = HttpResponse(blob.data, content_type=content_type or "application/octet-stream")
+    response["Content-Disposition"] = f'inline; filename="{smart_str(blob.path.split("/")[-1])}"'
+    return response

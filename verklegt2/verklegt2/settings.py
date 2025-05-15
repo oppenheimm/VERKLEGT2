@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "crispy_tailwind",
     "django.contrib.humanize",
     "payment",
+    "storages"
 ]
 
 MIDDLEWARE = [
@@ -94,6 +95,7 @@ DATABASES = {
     }
 }
 
+DEFAULT_FILE_STORAGE = "core.storage.DatabaseStorage"
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -126,15 +128,17 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
+# ───────────────────────────────────────── Static / media ──
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
-STATIC_URL = "static/"
-MEDIA_URL = "media/"
+# Media settings are optional once everything is in the DB,
+# but leaving them here won’t hurt:
+MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
+# ───────────────────────────────────────── File storage ──
+DEFAULT_FILE_STORAGE = "verklegt2.core.storage.DatabaseStorage"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 

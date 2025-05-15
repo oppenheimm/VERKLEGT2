@@ -1,6 +1,9 @@
 from django.db import models
 from django.conf import settings
 from users.models import User
+from core.storage import DatabaseStorage
+import uuid
+
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -62,6 +65,7 @@ class Property(models.Model):
 
     main_image = models.ImageField(
         upload_to=property_main_image_path,
+        storage=DatabaseStorage(),
         blank=True,
         null=True,
     )
