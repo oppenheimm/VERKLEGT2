@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     "crispy_tailwind",
     "django.contrib.humanize",
     "payment",
-    "storages"
+    "storages",
 ]
 
 MIDDLEWARE = [

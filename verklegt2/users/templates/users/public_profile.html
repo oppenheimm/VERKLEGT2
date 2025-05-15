@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load humanize %} 
+{% block title %}{{ seller.username }}{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto mt-16 bg-white shadow-xl rounded-2xl px-8 py-10">
+  <h1 class="text-3xl font-semibold text-center mb-6">
+     {{ seller.name|default:seller.username }}
+  </h1>
+
+  {% if seller.profile_image %}
+    <img src="{{ seller.profile_image.url }}"
+         class="w-32 h-32 rounded-full mx-auto mb-6 object-cover">
+  {% endif %}
+
+  <p class="text-center text-gray-700 mb-2">
+    <strong>Email:</strong> {{ seller.email }}
+  </p>
+  {% if seller.phone %}
+    <p class="text-center text-gray-700 mb-4">
+      <strong>Phone:</strong> {{ seller.phone }}
+    </p>
+  {% endif %}
+
+  <hr class="my-6">
+
+<h2 class="text-xl font-semibold mb-4 text-center">Active listings</h2>
+
+{% if listings %}
+  <ul class="space-y-2">
+    {% for p in listings %}
+      <li>
+        <a href="{% url 'property:detail' p.id %}"
+           class="text-indigo-600 hover:underline">
+          {{ p.title }} – {{ p.price|floatformat:"0"|intcomma }} kr
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p class="text-center text-gray-500">No active listings.</p>
+{% endif %}
+
+</div>
+{% endblock %}

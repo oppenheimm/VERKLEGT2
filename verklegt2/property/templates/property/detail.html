@@ -20,6 +20,16 @@
       </div>
   {% endif %}
 
+  {% comment %}Just below the property title, for example{% endcomment %}
+<p class="text-sm text-gray-600 mb-4">
+  Listed&nbsp;by
+  <a href="{% url 'users:public_profile' property.owner.id %}"
+     class="text-blue-600 hover:underline">
+     {{ property.owner.name|default:property.owner.username }}
+  </a>
+</p>
+
+
   <!-- Extra images -->
   {% if property.images.all %}
     <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">

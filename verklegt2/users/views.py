@@ -5,10 +5,10 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import (
-    PasswordChangeView, 
-    PasswordChangeDoneView
-    , LoginView as DjangoLoginView,
-    LogoutView as DjangoLogoutView
+    PasswordChangeView,
+    PasswordChangeDoneView,
+    LoginView as DjangoLoginView,
+    LogoutView as DjangoLogoutView,
 )
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -18,60 +18,90 @@ from django.views.generic.edit import UpdateView
 from .forms import SignUpForm, LoginForm, ProfileForm
 from .models import User
 
+from django.views.generic import TemplateView
+from django.shortcuts import get_object_or_404
+
+
 class SignUpView(CreateView):
     """
     Renders a signup form and handles user registration.
     Uses Django's built-in CreateView under the hood.
     """
-    form_class    = SignUpForm 
-    template_name = 'users/signup.html'
-    success_url   = reverse_lazy('users:login')
+
+    form_class = SignUpForm
+    template_name = "users/signup.html"
+    success_url = reverse_lazy("users:login")
+
 
 class LoginView(DjangoLoginView):
     """
     Renders a login form and handles authentication.
     Uses Django's built-in LoginView under the hood.
     """
-    form_class    = LoginForm
-    template_name = 'users/login.html'
+
+    form_class = LoginForm
+    template_name = "users/login.html"
     redirect_authenticated_user = True
-    
+
+
 class LogoutView(DjangoLogoutView):
     """
     Handles user logout.
     Uses Django's built-in LogoutView under the hood.
     """
-    next_page = reverse_lazy('users:login')
+
+    next_page = reverse_lazy("users:login")
+
 
 class ProfileDetailView(LoginRequiredMixin, TemplateView):
     """Show profile info with Edit / Change Password buttons."""
-    template_name = 'users/profile.html'
+
+    template_name = "users/profile.html"
+
 
 class ProfileEditView(LoginRequiredMixin, UpdateView):
     """Edit name, email, profile image only."""
-    form_class    = ProfileForm
-    template_name = 'users/profile_edit.html'
-    success_url   = reverse_lazy('users:profile')
+
+    form_class = ProfileForm
+    template_name = "users/profile_edit.html"
+    success_url = reverse_lazy("users:profile")
 
     def get_object(self):
         return self.request.user
 
     def form_valid(self, form):
-        messages.success(self.request, 'Profile updated successfully.')
+        messages.success(self.request, "Profile updated successfully.")
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        messages.error(self.request, 'Please correct the errors below.')
+        messages.error(self.request, "Please correct the errors below.")
         return super().form_invalid(form)
+
 
 class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
     """Separate page for changing password."""
-    template_name = 'users/password_change.html'
-    success_url   = reverse_lazy('users:password_change_done')
+
+    template_name = "users/password_change.html"
+    success_url = reverse_lazy("users:password_change_done")
 
     def form_valid(self, form):
-        messages.success(self.request, 'Password changed successfully.')
+        messages.success(self.request, "Password changed successfully.")
         return super().form_valid(form)
 
+
 class CustomPasswordChangeDoneView(LoginRequiredMixin, PasswordChangeDoneView):
-    template_name = 'users/password_change_done.html'
+    template_name = "users/password_change_done.html"
+
+
+class PublicProfileView(TemplateView):
+    template_name = "users/public_profile.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        seller = get_object_or_404(User, pk=self.kwargs["pk"])
+        ctx["seller"] = seller
+        # add the filtered listings here ⬇︎
+        ctx["listings"] = seller.properties.filter(
+            is_published=True, is_sold=False
+        ).order_by("-created_at")
+        return ctx
