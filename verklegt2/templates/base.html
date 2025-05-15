@@ -50,15 +50,6 @@
           <span class="text-2xl">🏰</span> Castle Apartments
         </a>
 
-        <nav class="hidden md:block">
-          <ul class="flex gap-8 font-medium">
-            <li><a class="hover:text-brand" href="#">Buy</a></li>
-            <li><a class="hover:text-brand" href="#">Sell</a></li>
-            <li><a class="hover:text-brand" href="#">Manage Property</a></li>
-            <li><a class="hover:text-brand" href="#">Resources</a></li>
-          </ul>
-        </nav>
-
         {% if request.user.is_authenticated %}
         <div class="flex gap-4 items-center">
           <a href="{% url 'dashboard:notifications' %}" class="relative">
