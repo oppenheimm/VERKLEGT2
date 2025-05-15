@@ -9,10 +9,7 @@
     </title>
 
     <!-- Google Font -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
     <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -20,18 +17,10 @@
       tailwind.config = {
         theme: {
           extend: {
-            fontFamily: {
-              sans: ["Inter", "ui-sans-serif", "system-ui"],
-            },
+            fontFamily: { sans: ["Inter", "ui-sans-serif", "system-ui"] },
             colors: {
-              brand: {
-                DEFAULT: "#4f46e5",
-                light: "#eef2ff",
-              },
-              dark: {
-                DEFAULT: "#0f0e3c",
-                700: "#1a1a70",
-              },
+              brand: { DEFAULT: "#4f46e5", light: "#eef2ff" },
+              dark: { DEFAULT: "#0f0e3c", 700: "#1a1a70" },
             },
           },
         },
@@ -40,12 +29,10 @@
     {% block extra_head %}{% endblock %}
   </head>
 
-  <body class="font-sans antialiased text-slate-900">
-    <!-- Header -->
+  <body class="font-sans antialiased text-slate-900 flex flex-col min-h-screen">
+    <!-- Header (unchanged) -->
     <header class="bg-brand-light">
-      <div
-        class="container mx-auto max-w-7xl px-6 py-6 flex items-center justify-between w-full"
-      >
+      <div class="container mx-auto max-w-7xl px-6 py-6 flex items-center justify-between w-full">
         <a href="/" class="flex items-center gap-2 text-xl font-bold">
           <span class="text-2xl">🏰</span> Castle Apartments
         </a>
@@ -54,276 +41,56 @@
         <div class="flex gap-4 items-center">
           <a href="{% url 'dashboard:notifications' %}" class="relative">
             <!-- Notification Icon -->
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6 text-gray-700 hover:text-brand transition"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 17h5l-1.405-1.405a2.032 2.032 0 00-.595-1.405L18 13V8a6 6 0 10-12 0v5l-.001.19a2.032 2.032 0 00-.595 1.405L3 17h5m7 0v1a3 3 0 11-6 0v-1m6 0H9"
-              />
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 hover:text-brand transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405a2.032 2.032 0 00-.595-1.405L18 13V8a6 6 0 10-12 0v5l-.001.19a2.032 2.032 0 00-.595 1.405L3 17h5m7 0v1a3 3 0 11-6 0v-1m6 0H9" />
             </svg>
-            <span
-              class="absolute top-0 right-0 block h-2 w-2 rounded-full ring-2 ring-white bg-red-600"
-            ></span>
+            <span class="absolute top-0 right-0 block h-2 w-2 rounded-full ring-2 ring-white bg-red-600"></span>
           </a>
           <a href="{% url 'users:profile' %}">
             <!-- Profile Icon -->
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-8 w-8 text-gray-700 hover:text-brand transition"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M16 14a4 4 0 01-8 0m8-4a4 4 0 11-8 0 4 4 0 018 0z"
-              />
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-700 hover:text-brand transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 14a4 4 0 01-8 0m8-4a4 4 0 11-8 0 4 4 0 018 0z" />
             </svg>
           </a>
           {% if request.user.user_type == 'individual_seller' or request.user.user_type == 'agency_seller' %}
           <a href="{% url 'dashboard:dashboard' %}">
             <!-- Dashboard Icon -->
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-8 w-8 text-gray-700 hover:text-brand transition"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M3 3h7v7H3V3zm0 11h7v7H3v-7zm11-11h7v7h-7V3zm0 11h7v7h-7v-7z"
-              />
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-700 hover:text-brand transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h7v7H3V3zm0 11h7v7H3v-7zm11-11h7v7h-7V3zm0 11h7v7h-7v-7z" />
             </svg>
           </a>
           {% endif %}
         </div>
         {% else %}
         <div class="flex gap-4">
-          <a
-            href="{% url 'users:login' %}"
-            class="px-5 py-2 rounded-lg border-2 border-brand font-semibold hover:bg-brand hover:text-white transition"
-          >
-            Login
-          </a>
-          <a
-            href="{% url 'users:signup' %}"
-            class="px-5 py-2 rounded-lg bg-brand text-white font-semibold hover:opacity-90 transition"
-          >
-            Sign up
-          </a>
+          <a href="{% url 'users:login' %}" class="px-5 py-2 rounded-lg border-2 border-brand font-semibold hover:bg-brand hover:text-white transition">Login</a>
+          <a href="{% url 'users:signup' %}" class="px-5 py-2 rounded-lg bg-brand text-white font-semibold hover:opacity-90 transition">Sign up</a>
         </div>
         {% endif %}
       </div>
     </header>
 
     <!-- Page Content -->
-    {% block content %}{% endblock %}
+    <main class="flex-1">
+      {% block content %}{% endblock %}
+    </main>
 
-    <!-- Footer -->
-    <footer class="bg-slate-50 text-sm pb-16">
-      <!-- CTA section -->
-      <section
-        class="bg-gradient-to-r from-dark to-dark-700 text-white py-24 mt-24"
-      >
-        <div class="container mx-auto max-w-7xl px-6">
-          <h2 class="text-3xl md:text-4xl font-bold max-w-xl">
-            We make it easy for
-            <span class="text-indigo-300">tenants and landlords</span>.
-          </h2>
-          <p class="max-w-xl mt-4 text-indigo-200">
-            Whether it's selling your current home, getting financing, or buying
-            a new home, we make it easy and efficient. The best part? You'll
-            save a bunch of money and time with our services.
-          </p>
+    <!-- Footer (relative, anchors bottom because of flex column) -->
+    <footer class="bg-gray-800 text-gray-300 w-full border-t border-brand py-4">
+      <div class="container mx-auto max-w-7xl px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+        <p class="text-xs md:text-sm">&copy; {% now "Y" %} Castle Apartments.</p>
 
-          <!-- CTA boxes -->
-          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-14">
-            <div
-              class="flex flex-col gap-4 bg-white/10 rounded-xl p-8 backdrop-blur"
-            >
-              <div class="text-3xl">📹</div>
-              <h3 class="font-semibold text-lg">Virtual home tour</h3>
-              <p class="text-indigo-200 text-sm">
-                Communicate directly with landlords and enjoy a virtual tour
-                before you buy or rent.
-              </p>
-            </div>
-
-            <div
-              class="flex flex-col gap-4 bg-white text-slate-900 rounded-xl p-8"
-            >
-              <div class="text-3xl">🏠</div>
-              <h3 class="font-semibold text-lg">Find the best deal</h3>
-              <p class="text-slate-600 text-sm">
-                Browse thousands of properties, save favourites and set alerts
-                so you never miss the perfect home.
-              </p>
-            </div>
-
-            <div
-              class="flex flex-col gap-4 bg-white/10 rounded-xl p-8 backdrop-blur"
-            >
-              <div class="text-3xl">💼</div>
-              <h3 class="font-semibold text-lg">Get expert advice</h3>
-              <p class="text-indigo-200 text-sm">
-                Find the right financing options and expert support for your
-                investment journey.
-              </p>
-            </div>
-          </div>
-
-          <!-- Stats -->
-          <div
-            class="grid md:grid-cols-3 text-center gap-8 mt-24 border-t border-white/20 pt-12"
-          >
-            <div>
-              <h3 class="text-3xl font-bold">7.4%</h3>
-              <p class="text-indigo-200 text-sm">Property return rate</p>
-            </div>
-            <div>
-              <h3 class="text-3xl font-bold">3,856</h3>
-              <p class="text-indigo-200 text-sm">Properties in Sell & Rent</p>
-            </div>
-            <div>
-              <h3 class="text-3xl font-bold">2,540</h3>
-              <p class="text-indigo-200 text-sm">
-                Daily completed transactions
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Footer Links (3 columns) -->
-      <div class="max-w-4xl mx-auto">
-        <div
-          class="container mx-auto max-w-7xl px-6 grid grid-cols-1 md:grid-cols-3 gap-10 py-12"
-        >
-          <!-- Column 1: Sell a Home + Buy a Home -->
-          <div>
-            <div class="mb-8">
-              <h3 class="text-sm font-semibold text-gray-900 mb-4">
-                SELL A HOME
-              </h3>
-              <ul class="space-y-2 text-sm text-gray-700">
-                <li>
-                  <a href="#" class="hover:text-gray-900">Request an offer</a>
-                </li>
-                <li><a href="#" class="hover:text-gray-900">Pricing</a></li>
-                <li><a href="#" class="hover:text-gray-900">Reviews</a></li>
-                <li><a href="#" class="hover:text-gray-900">Stories</a></li>
-              </ul>
-            </div>
-            <div>
-              <h3 class="text-sm font-semibold text-gray-900 mb-4">
-                BUY A HOME
-              </h3>
-              <ul class="space-y-2 text-sm text-gray-700">
-                <li><a href="#" class="hover:text-gray-900">Buy</a></li>
-                <li><a href="#" class="hover:text-gray-900">Finance</a></li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- Column 2: Buy, Rent and Sell + Terms & Privacy -->
-          <div>
-            <div class="mb-8">
-              <h3 class="text-sm font-semibold text-gray-900 mb-4">
-                BUY, RENT AND SELL
-              </h3>
-              <ul class="space-y-2 text-sm text-gray-700">
-                <li>
-                  <a href="#" class="hover:text-gray-900"
-                    >Buy and sell properties</a
-                  >
-                </li>
-                <li><a href="#" class="hover:text-gray-900">Rent home</a></li>
-                <li>
-                  <a href="#" class="hover:text-gray-900">Builder trade-up</a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 class="text-sm font-semibold text-gray-900 mb-4">
-                TERMS &amp; PRIVACY
-              </h3>
-              <ul class="space-y-2 text-sm text-gray-700">
-                <li>
-                  <a href="#" class="hover:text-gray-900">Trust &amp; Safety</a>
-                </li>
-                <li>
-                  <a href="#" class="hover:text-gray-900">Terms of Service</a>
-                </li>
-                <li>
-                  <a href="#" class="hover:text-gray-900">Privacy Policy</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- Column 3: About + Resources -->
-          <div>
-            <div class="mb-8">
-              <h3 class="text-sm font-semibold text-gray-900 mb-4">ABOUT</h3>
-              <ul class="space-y-2 text-sm text-gray-700">
-                <li><a href="#" class="hover:text-gray-900">Company</a></li>
-                <li>
-                  <a href="#" class="hover:text-gray-900">How it works</a>
-                </li>
-                <li><a href="#" class="hover:text-gray-900">Contact</a></li>
-                <li><a href="#" class="hover:text-gray-900">Investors</a></li>
-              </ul>
-            </div>
-            <div>
-              <h3 class="text-sm font-semibold text-gray-900 mb-4">
-                RESOURCES
-              </h3>
-              <ul class="space-y-2 text-sm text-gray-700">
-                <li><a href="#" class="hover:text-gray-900">Blog</a></li>
-                <li><a href="#" class="hover:text-gray-900">Guides</a></li>
-                <li><a href="#" class="hover:text-gray-900">FAQ</a></li>
-                <li><a href="#" class="hover:text-gray-900">Help Center</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <!-- /grid -->
-
-        <div class="space-x-3 mt-8">
+        <nav class="flex items-center gap-4 text-xs md:text-sm">
+          <a href="{% url 'core:index' %}" class="hover:text-white">Home</a>
+          <a href="{% url 'core:contact' %}" class="hover:text-white">Contact</a>
           {% if request.user.is_authenticated %}
-          <a href="" class="text-sm hover:text-gray-900">Inbox</a>
-          <a
-            href="{% url 'dashboard:dashboard' %}"
-            class="text-sm hover:text-gray-900"
-            >Dashboard</a
-          >
-          <form method="post" action="{% url 'users:logout' %}" class="inline">
-            {% csrf_token %}
-            <button type="submit" class="text-sm hover:text-gray-900">
-              Log Out
-            </button>
-          </form>
-          {% else %}
-          <a href="{% url 'users:signup' %}" class="text-sm hover:text-gray-900"
-            >Sign up</a
-          >
-          <a href="{% url 'users:login' %}" class="text-sm hover:text-gray-900"
-            >Log in</a
-          >
+            <a href="{% url 'dashboard:dashboard' %}" class="hover:text-white">Dashboard</a>
           {% endif %}
-        </div>
+          <!-- tiny social sauce -->
+          <a href="https://twitter.com" target="_blank" class="hover:text-brand-light">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M22.46 6c-.77.35-1.6.58-2.46.69a4.3 4.3 0 001.9-2.37 8.59 8.59 0 01-2.74 1.05 4.29 4.29 0 00-7.32 3.91A12.17 12.17 0 013 5.16a4.29 4.29 0 001.32 5.73 4.25 4.25 0 01-1.94-.54v.05a4.29 4.29 0 003.44 4.2 4.3 4.3 0 01-1.94.07 4.29 4.29 0 004.01 2.98A8.61 8.61 0 012 19.54 12.14 12.14 0 008.29 21c7.55 0 11.68-6.26 11.68-11.68 0-.18-.01-.35-.02-.53A8.35 8.35 0 0022.46 6z"/></svg>
+          </a>
+        </nav>
       </div>
     </footer>
   </body>
