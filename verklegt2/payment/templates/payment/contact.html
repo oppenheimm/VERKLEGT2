@@ -1,0 +1,45 @@
+{% extends "payment_base.html" %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-8">
+
+  <form method="post" class="bg-white p-6 rounded shadow space-y-6">
+    {% csrf_token %}
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Full Name</label>
+      <input type="text" name="full_name" placeholder="John Doe" value="{{ form.full_name.value|default:'' }}"
+        class="w-full mt-1 rounded border-gray-300 shadow-sm focus:ring focus:ring-blue-200" required>
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700">National ID</label>
+      <input type="text" name="national_id" placeholder="123456-7890" value="{{ form.national_id.value|default:'' }}"
+        class="w-full mt-1 rounded border-gray-300 shadow-sm" required>
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Street Name</label>
+      <input type="text" name="street_name" placeholder="Laugavegur 123" value="{{ form.street_name.value|default:'' }}"
+        class="w-full mt-1 rounded border-gray-300 shadow-sm" required>
+    </div>
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700">City</label>
+        <input type="text" name="city" placeholder="Reykjavík" value="{{ form.city.value|default:'' }}"
+          class="w-full mt-1 rounded border-gray-300 shadow-sm" required>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Postal Code</label>
+        <input type="text" name="postal_code" placeholder="101" value="{{ form.postal_code.value|default:'' }}"
+          class="w-full mt-1 rounded border-gray-300 shadow-sm" required>
+      </div>
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Country</label>
+      {{ form.country }}
+    </div>
+    <div class="flex justify-between">
+      <a href="{% url 'dashboard:notifications' %}" class="text-sm text-gray-500 underline">Cancel</a>
+      <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Continue</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "payment_base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-8">
+  <div class="bg-white p-8 rounded-lg shadow-lg space-y-8">
+    <h2 class="text-3xl font-extrabold text-gray-900 text-center">Review Information</h2>
+
+    <div class="flex justify-between">
+      <div class="border-t pt-6">
+        <h3 class="text-xl font-bold text-gray-800">Property Details</h3>
+        <ul class="mt-4 space-y-2 text-gray-700">
+          <li><span class="font-semibold">Address:</span> {{ property.address }}, {{ property.zip_code }} {{ property.city }}</li>
+          <li><span class="font-semibold">Size:</span> {{ property.sqft }} m²</li>
+          <li><span class="font-semibold">Rooms:</span> {{ property.bedrooms }}</li>
+          <li><span class="font-semibold">Offer Amount:</span> {{ offer.amount }} kr.</li>
+        </ul>
+      </div>
+
+      {% if owner %}
+      <div class="border-t pt-6 mr-12">
+        <h3 class="text-xl font-bold text-gray-800">Seller Information</h3>
+        <ul class="mt-4 space-y-2 text-gray-700">
+          <li><span class="font-semibold">Name:</span> {{ owner.name }}</li>
+          <li><span class="font-semibold">Email:</span> {{ owner.email }}</li>
+          <li><span class="font-semibold">Phone:</span> {{ owner.phone }}</li>
+          {% if owner.user_type == "agency_seller" %}
+          <li><span class="font-semibold">Agency:</span> {{ owner.agency_name }}</li>
+          {% endif %}
+        </ul>
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="border-t pt-6">
+      <h3 class="text-xl font-bold text-gray-800">Contact Information</h3>
+      <ul class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+        <li class="text-gray-700"><span class="font-semibold">Name:</span> {{ finalization.full_name }}</li>
+        <li class="text-gray-700"><span class="font-semibold">National ID:</span> {{ finalization.national_id }}</li>
+        <li class="text-gray-700"><span class="font-semibold">Street:</span> {{ finalization.street_name }}</li>
+        <li class="text-gray-700"><span class="font-semibold">City:</span> {{ finalization.city }}</li>
+        <li class="text-gray-700"><span class="font-semibold">Postal Code:</span> {{ finalization.postal_code }}</li>
+        <li class="text-gray-700"><span class="font-semibold">Country:</span> {{ finalization.country }}</li>
+      </ul>
+    </div>
+
+    <div class="border-t pt-6">
+      <h3 class="text-xl font-bold text-gray-800">Payment Method</h3>
+      <p class="mt-2 text-gray-700 capitalize">{{ finalization.payment_method|title }}</p>
+
+      {% if finalization.payment_method == 'credit_card' %}
+      <ul class="mt-4 space-y-2">
+        <li class="text-gray-700"><span class="font-semibold">Cardholder:</span> {{ finalization.cardholder_name }}</li>
+        <li class="text-gray-700"><span class="font-semibold">Card:</span> **** **** **** {{ finalization.card_number|slice:"-4:" }}</li>
+        <li class="text-gray-700"><span class="font-semibold">Expiry:</span> {{ finalization.expiry_date }}</li>
+      </ul>
+      {% elif finalization.payment_method == 'bank_transfer' %}
+      <div class="mt-4 space-y-2">
+        <p class="text-gray-700"><span class="font-semibold">IBAN:</span> {{ finalization.iban }}</p>
+        <p class="text-gray-700"><span class="font-semibold">Bank:</span> {{ finalization.bank_name }}</p>
+      </div>
+      {% elif finalization.payment_method == 'mortgage' %}
+      <div class="mt-4 space-y-2">
+        <p class="text-gray-700"><span class="font-semibold">Lender:</span> {{ finalization.lender_name }}</p>
+        <p class="text-gray-700"><span class="font-semibold">Loan Amount:</span> {{ finalization.loan_amount }}</p>
+      </div>
+      {% endif %}
+    </div>
+
+    <form method="post" class="flex items-center justify-between border-t pt-6">
+      {% csrf_token %}
+      <a href="{% url 'finalize_offer' offer.id 'payment' %}" class="text-sm text-blue-600 hover:text-blue-800 underline">Go Back</a>
+      <button type="submit" class="bg-green-600 hover:bg-green-700 transition-all duration-200 text-white font-semibold px-8 py-3 rounded-lg shadow">
+        Confirm Purchase
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}

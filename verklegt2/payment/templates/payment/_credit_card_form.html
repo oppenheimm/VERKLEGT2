@@ -1,0 +1,49 @@
+<h2 class="text-2xl font-bold mb-8">Enter Credit Card Details</h2>
+      <!-- Payment Methods -->
+      <div class="mb-4">
+        <h3 class="font-semibold mb-4">Payment methods</h3>
+        <div class="flex gap-6">
+          <img src="https://img.icons8.com/color/48/000000/visa.png" class="h-12" />
+          <img src="https://img.icons8.com/color/48/000000/stripe.png" class="h-12" />
+          <img src="https://img.icons8.com/color/48/000000/paypal.png" class="h-12" />
+          <img src="https://img.icons8.com/color/48/000000/mastercard.png" class="h-12" />
+          <img src="https://img.icons8.com/color/48/000000/google-pay-india.png" class="h-12" />
+        </div>
+      </div>
+<form method="post" class="space-y-6">
+  {% csrf_token %}
+  <div class="mb-6">
+    <h3 class="font-bold text-lg mb-4">Card details</h3>
+    <label for="cardholder_name" class="text-sm block mb-1">Cardholder Name</label>
+    <input id="cardholder_name" type="text" name="cardholder_name" placeholder="Seen on your card"
+           value="{{ form.cardholder_name.value|default:'' }}"
+           class="border rounded-md px-4 py-2 w-full mb-4" required>
+
+    <label for="card_number" class="text-sm block mb-1">Credit Card Number</label>
+    <input id="card_number" type="text" name="card_number" placeholder="Seen on your card"
+           value="{{ form.card_number.value|default:'' }}"
+           class="border rounded-md px-4 py-2 w-full mb-4" required>
+
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label for="expiry_date" class="text-sm block mb-1">Expiry Date (MM/YY)</label>
+        <input id="expiry_date" type="text" name="expiry_date" placeholder="07/27"
+               value="{{ form.expiry_date.value|default:'' }}"
+               class="border rounded-md px-4 py-2 w-full" required>
+      </div>
+      <div>
+        <label for="cvc" class="text-sm block mb-1">CVC</label>
+        <input id="cvc" type="text" name="cvc" placeholder="654"
+               value="{{ form.cvc.value|default:'' }}"
+               class="border rounded-md px-4 py-2 w-full" required>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex">
+    <button type="submit"
+            class="bg-indigo-900 text-white font-semibold py-2 px-6 rounded-md hover:bg-indigo-800 transition">
+      Continue
+    </button>
+  </div>
+</form>

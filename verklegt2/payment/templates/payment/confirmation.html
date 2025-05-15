@@ -1,0 +1,11 @@
+{% extends "payment_base.html" %}
+
+{% block content %}
+<div class="text-center py-24">
+  <h1 class="text-3xl font-bold text-green-600 mb-4">Purchase Confirmed!</h1>
+  <p class="text-gray-700">Your purchase has been successfully submitted. We'll follow up shortly.</p>
+  <a href="{% url 'core:index' %}" class="mt-6 inline-block bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
+    Back to Homepage
+  </a>
+</div>
+{% endblock %}

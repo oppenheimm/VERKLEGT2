@@ -1,0 +1,43 @@
+{% extends "payment_base.html" %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-8 flex pb-20">
+  <!-- Left side: Payment Method Selection -->
+  <div class="w-1/2 flex flex-col items-center justify-center border-r border-gray-200 bg-white">
+    <form method="post" id="payment-method-form"
+          class="flex flex-col bg-blue-100 py-6 px-12 rounded-md shadow gap-10">
+      {% csrf_token %}
+      <div>
+        <label class="block text-lg font-medium text-gray-700 mb-2">Choose Payment Method</label>
+        {{ form.payment_method }}
+      </div>
+    <a href="{% url 'finalize_offer' offer.id 'contact' %}" class="text-sm text-blue-500 hover:text-blue-700 underline">Go back</a>
+    </form>
+  </div>
+
+  <!-- Right side: Dynamic content -->
+  <div class="w-1/2 px-16 py-10 flex flex-col bg-white">
+    {% if selected_payment_method == "credit_card" %}
+      {% include "payment/_credit_card_form.html" %}
+    {% elif selected_payment_method == "bank_transfer" %}
+      {% include "payment/_bank_transfer_form.html" %}
+    {% elif selected_payment_method == "mortgage" %}
+      {% include "payment/_mortgage_form.html" %}
+    {% else %}
+      <p class="text-gray-500 text-sm italic">Please select a payment method.</p>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Auto-submit JavaScript -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const select = document.querySelector('select[name="payment_method"]');
+    if (select) {
+      select.addEventListener("change", function () {
+        document.getElementById("payment-method-form").submit();
+      });
+    }
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,36 @@
+<h2 class="text-2xl font-bold mb-8">Mortgage Application</h2>
+
+<form method="post" class="space-y-6">
+  {% csrf_token %}
+  <div>
+    <label class="block text-sm font-medium text-gray-700 mb-1">Lender Name</label>
+    <input type="text" name="lender_name" placeholder="Lender Name"
+           value="{{ form.mortgage_provider.value|default:'' }}"
+           class="border rounded-md px-4 py-2 w-full" required>
+  </div>
+  <div>
+    <label class="block text-sm font-medium text-gray-700 mb-1">Loan Amount</label>
+    <input type="number" name="loan_amount" placeholder="Amount"
+           value="{{ form.loan_amount.value|default:'' }}"
+           class="border rounded-md px-4 py-2 w-full" required>
+  </div>
+  <div>
+    <label class="block text-sm font-medium text-gray-700 mb-1">Interest Rate</label>
+    <input type="text" name="approval_code" placeholder="Approval Code"
+           value="{{ form.interest_rate.value|default:'' }}"
+           class="border rounded-md px-4 py-2 w-full" required>
+  </div>
+  <div>
+    <label class="block text-sm font-medium text-gray-700 mb-1">Approval Code</label>
+    <input type="text" name="approval_code" placeholder="Approval Code"
+           value="{{ form.approval_code.value|default:'' }}"
+           class="border rounded-md px-4 py-2 w-full" required>
+  </div>
+
+  <div class="flex justify-end">
+    <button type="submit"
+            class="bg-indigo-900 text-white font-semibold py-3 px-6 rounded-md hover:bg-indigo-800 transition">
+      Continue
+    </button>
+  </div>
+</form>
