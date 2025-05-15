@@ -21,3 +21,5 @@ env/
 # Migrations (optional, if you don't want to track them initially)
 **/migrations/*.py
 !**/migrations/__init__.py
+
+media/
