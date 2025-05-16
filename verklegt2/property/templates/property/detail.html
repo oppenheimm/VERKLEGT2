@@ -20,14 +20,19 @@
       </div>
   {% endif %}
 
-  {% comment %}Just below the property title, for example{% endcomment %}
-<p class="text-sm text-gray-600 mb-4">
-  Listed&nbsp;by
+<p class="text-sm text-gray-600 mb-4 flex items-center">
+  {% if property.owner.profile_image %}
+    <img src="{{ property.owner.profile_image.url }}"
+         alt="avatar"
+         class="w-8 h-8 rounded-full mr-2 object-cover">
+  {% endif %}
+  Listed&nbsp;by&nbsp;
   <a href="{% url 'users:public_profile' property.owner.id %}"
-     class="text-blue-600 hover:underline">
+     class="text-indigo-600 hover:underline">
      {{ property.owner.name|default:property.owner.username }}
   </a>
 </p>
+
 
 
   <!-- Extra images -->

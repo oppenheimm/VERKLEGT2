@@ -100,8 +100,9 @@ class PublicProfileView(TemplateView):
         ctx = super().get_context_data(**kwargs)
         seller = get_object_or_404(User, pk=self.kwargs["pk"])
         ctx["seller"] = seller
-        # add the filtered listings here ⬇︎
-        ctx["listings"] = seller.properties.filter(
-            is_published=True, is_sold=False
-        ).order_by("-created_at")
+        if seller.user_type != User.BUYER:
+            ctx["profile"] = seller.seller_profile
+        ctx["properties"] = seller.properties.filter(is_published=True).order_by(
+            "-created_at"
+        )
         return ctx

@@ -80,19 +80,24 @@ class BuyerProfile(models.Model):
 
 
 class SellerProfile(models.Model):
-    """
-    Profile data specific to sellers (individual or agency).
-    One-to-one relationship with User where user_type is individual or agency.
-    """
+    """Extended information for sellers (individual or agency)."""
 
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="seller_profile",
     )
-    # If individual seller, store individual's name
-    individual_name = models.CharField(max_length=255, blank=True)
-    # If agency seller, store company details
+
+    # Address (only relevant for agencies)
+    street = models.CharField(max_length=255, blank=True)
+    city = models.CharField(max_length=100, blank=True)
+    postal_code = models.CharField(max_length=20, blank=True)
+
+    logo = models.ImageField(upload_to="seller_logos/", blank=True, null=True)
+    cover_image = models.ImageField(upload_to="seller_covers/", blank=True, null=True)
+    bio = models.TextField(blank=True)
+
+    # Existing fields
     company_name = models.CharField(max_length=255, blank=True)
     license_number = models.CharField(max_length=100, blank=True)
 
@@ -104,5 +109,9 @@ class SellerProfile(models.Model):
         return self.user.user_type == User.AGENCY_SELLER
 
     @property
-    def is_individual(self):
-        return self.user.user_type == User.INDIVIDUAL_SELLER
+    def address_display(self):
+        if self.is_agency:
+            return (
+                f"{self.street}, {self.city} {self.postal_code}".strip()
+            )  # hide if empty
+        return ""

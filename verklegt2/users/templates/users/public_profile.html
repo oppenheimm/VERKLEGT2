@@ -24,21 +24,44 @@
 
   <hr class="my-6">
 
-<h2 class="text-xl font-semibold mb-4 text-center">Active listings</h2>
 
-{% if listings %}
-  <ul class="space-y-2">
-    {% for p in listings %}
-      <li>
-        <a href="{% url 'property:detail' p.id %}"
-           class="text-indigo-600 hover:underline">
-          {{ p.title }} – {{ p.price|floatformat:"0"|intcomma }} kr
-        </a>
-      </li>
+
+
+{% load humanize %}
+...
+{% if profile.cover_image %}
+  <img src="{{ profile.cover_image.url }}" class="w-full h-48 object-cover rounded-lg mb-6">
+{% endif %}
+
+{% if profile.bio %}
+  <p class="mb-4 text-gray-700">{{ profile.bio }}</p>
+{% endif %}
+
+{% if profile.is_agency %}
+  <div class="mb-4 text-gray-700">
+    {% if profile.company_name %}<p><strong>Company:</strong> {{ profile.company_name }}</p>{% endif %}
+    {% if profile.license_number %}<p><strong>License #:</strong> {{ profile.license_number }}</p>{% endif %}
+    {% if profile.address_display %}<p><strong>Address:</strong> {{ profile.address_display }}</p>{% endif %}
+  </div>
+{% endif %}
+
+<h2 class="text-xl font-semibold mb-4 text-center">Properties on sale</h2>
+{% if properties %}
+  <div class="grid grid-cols-1 gap-4">
+    {% for p in properties %}
+      <a href="{% url 'property:detail' p.id %}" class="flex items-center p-2 border rounded-lg hover:shadow">
+        {% if p.main_image %}
+          <img src="{{ p.main_image.url }}" alt="thumb" class="w-20 h-20 object-cover rounded mr-4">
+        {% endif %}
+        <div>
+          <p class="font-semibold">{{ p.address }}</p>
+          <p class="text-gray-500 text-sm">{{ p.city }} {{ p.zip_code }}</p>
+        </div>
+      </a>
     {% endfor %}
-  </ul>
+  </div>
 {% else %}
-  <p class="text-center text-gray-500">No active listings.</p>
+  <p class="text-center text-gray-500">No properties currently on sale.</p>
 {% endif %}
 
 </div>

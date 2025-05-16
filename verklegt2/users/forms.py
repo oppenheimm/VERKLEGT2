@@ -1,211 +1,275 @@
 # users/forms.py
+import logging
 
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .models import User
+
+from .models import User, SellerProfile
+
+logger = logging.getLogger(__name__)
+
 
 class SignUpForm(UserCreationForm):
+    """Extended sign-up form that collects seller info when needed, now with
+    uniform styling for file inputs and textarea."""
+
+    # ───────── basic user fields ─────────
     username = forms.CharField(
-        widget=forms.TextInput(attrs={
-            'class': (
-                'w-full px-4 py-2 '
-                'border border-gray-300 '
-                'rounded-lg focus:outline-none '
-                'focus:ring-2 focus:ring-indigo-400'
-            ),
-            'placeholder': 'Enter your username',
-        })
+        widget=forms.TextInput(
+            attrs={
+                "class": "w-full px-4 py-2 border border-gray-300 rounded-lg "
+                "focus:ring-2 focus:ring-indigo-400",
+                "placeholder": "Enter your username",
+            }
+        )
     )
-    
     name = forms.CharField(
-        widget=forms.TextInput(attrs={
-            'class': (
-                'w-full px-4 py-2 '
-                'border border-gray-300 '
-                'rounded-lg focus:outline-none '
-                'focus:ring-2 focus:ring-indigo-400'
-            ),
-            'placeholder': 'Full Name',
-        })
+        widget=forms.TextInput(
+            attrs={
+                "class": "w-full px-4 py-2 border border-gray-300 rounded-lg "
+                "focus:ring-2 focus:ring-indigo-400",
+                "placeholder": "Full Name",
+            }
+        )
     )
-    
     email = forms.EmailField(
-        widget=forms.EmailInput(attrs={
-            'class': (
-                'w-full px-4 py-2 '
-                'border border-gray-300 '
-                'rounded-lg focus:outline-none '
-                'focus:ring-2 focus:ring-indigo-400'
-            ),
-            'placeholder': 'you@example.com',
-        })
+        widget=forms.EmailInput(
+            attrs={
+                "class": "w-full px-4 py-2 border border-gray-300 rounded-lg "
+                "focus:ring-2 focus:ring-indigo-400",
+                "placeholder": "you@example.com",
+            }
+        )
     )
     password1 = forms.CharField(
-        label='Password',
+        label="Password",
         strip=False,
-        widget=forms.PasswordInput(attrs={
-            'class': (
-                'w-full px-4 py-2 '
-                'border border-gray-300 '
-                'rounded-lg focus:outline-none '
-                'focus:ring-2 focus:ring-indigo-400'
-            ),
-            'placeholder': 'Enter a secure password',
-        })
+        widget=forms.PasswordInput(
+            attrs={
+                "class": "w-full px-4 py-2 border border-gray-300 rounded-lg "
+                "focus:ring-2 focus:ring-indigo-400",
+                "placeholder": "Enter a secure password",
+            }
+        ),
     )
     password2 = forms.CharField(
-        label='Confirm Password',
+        label="Confirm Password",
         strip=False,
-        widget=forms.PasswordInput(attrs={
-            'class': (
-                'w-full px-4 py-2 '
-                'border border-gray-300 '
-                'rounded-lg focus:outline-none '
-                'focus:ring-2 focus:ring-indigo-400'
-            ),
-            'placeholder': 'Repeat your password',
-        })
+        widget=forms.PasswordInput(
+            attrs={
+                "class": "w-full px-4 py-2 border border-gray-300 rounded-lg "
+                "focus:ring-2 focus:ring-indigo-400",
+                "placeholder": "Repeat your password",
+            }
+        ),
     )
     user_type = forms.ChoiceField(
         choices=User.USER_TYPE_CHOICES,
-        widget=forms.Select(attrs={
-            'class': (
-                'w-full px-4 py-2 '
-                'border border-gray-300 '
-                'rounded-lg focus:outline-none '
-                'focus:ring-2 focus:ring-indigo-400'
-            ),
-        }),
-        label='Select User Type',
+        label="Select User Type",
+        widget=forms.Select(
+            attrs={
+                "class": "w-full px-4 py-2 border border-gray-300 rounded-lg "
+                "focus:ring-2 focus:ring-indigo-400",
+            }
+        ),
+    )
+    phone = forms.CharField(
+        required=False,
+        label="Phone number",
+        widget=forms.TextInput(
+            attrs={
+                "class": "w-full px-4 py-2 border border-gray-300 rounded-lg "
+                "focus:ring-2 focus:ring-indigo-400",
+                "placeholder": "Your phone number",
+            }
+        ),
     )
 
-    phone = forms.CharField(
-        required=True,
-        widget=forms.TextInput(attrs={
-            'class': 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400',
-            'placeholder': 'Your phone number',
-        }),
-        label="Phone number"
-    )
-    
-    company_name = forms.CharField(
+    # ───────── seller-specific fields ─────────
+    company_name = forms.CharField(required=False, label="Company name (agency)")
+    license_number = forms.CharField(required=False, label="License number")
+    street = forms.CharField(required=False, label="Street name")
+    city = forms.CharField(required=False, label="City")
+    postal_code = forms.CharField(required=False, label="Postal code")
+
+    bio = forms.CharField(
         required=False,
-        widget=forms.TextInput(attrs={
-            'class': 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400',
-            'placeholder': 'Company name (if agency)',
-        }),
-        label="Company name (agency sellers only)"
+        widget=forms.Textarea(attrs={"rows": 4}),
+        label="Bio",
     )
-    
+    logo = forms.ImageField(required=False, label="Logo (agency)")
+    cover_image = forms.ImageField(required=False, label="Cover image")
+
+    # ▶ ONLY User-table fields go here
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ('username', 'name', 'email', 'user_type', 'phone', 'company_name', 'password1', 'password2')
-        
+        fields = (
+            "username",
+            "name",
+            "email",
+            "user_type",
+            "phone",
+            "password1",
+            "password2",
+        )
+
+    # ───────── validation & styling tweaks ─────────
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
-        # Filter out 'admin' from user_type choices
-        self.fields['user_type'].choices = [
-            (key, label) for key, label in User.USER_TYPE_CHOICES if key != 'admin'
+
+        # remove the “admin” option
+        self.fields["user_type"].choices = [
+            (k, v) for k, v in User.USER_TYPE_CHOICES if k != User.ADMIN
         ]
+
+        # give file inputs and textarea the same rounded look
+        file_style = (
+            "w-full text-sm text-gray-900 border border-gray-300 rounded-lg "
+            "cursor-pointer bg-gray-50 focus:outline-none focus:ring-2 "
+            "focus:ring-indigo-400"
+        )
+        for fld in ("logo", "cover_image"):
+            self.fields[fld].widget.attrs.update({"class": file_style})
+
+        self.fields["bio"].widget.attrs.update(
+            {
+                "class": "w-full px-4 py-2 border border-gray-300 rounded-lg "
+                "focus:ring-2 focus:ring-indigo-400",
+                "placeholder": "Tell buyers about yourself",
+            }
+        )
 
     def clean(self):
         cleaned = super().clean()
-        user_type = cleaned.get('user_type')
-        company = cleaned.get('company_name')
-        if user_type == User.AGENCY_SELLER and not company:
-            self.add_error('company_name', 'Company name is required for agency sellers.')
+        if cleaned.get("user_type") == User.AGENCY_SELLER:
+            required = (
+                "company_name",
+                "license_number",
+                "street",
+                "city",
+                "postal_code",
+            )
+            for fld in required:
+                if not cleaned.get(fld):
+                    self.add_error(fld, "Required for agency sellers.")
         return cleaned
 
+    # ───────── save extra profile data ─────────
     def save(self, commit=True):
-        user = super().save(commit)
-        # Save phone & company onto the right profile
-        if user.user_type == User.BUYER:
-            user.buyer_profile.phone = self.cleaned_data['phone']
-            user.buyer_profile.save()
-        else:
-            user.seller_profile.phone        = self.cleaned_data['phone']
-            user.seller_profile.company_name = self.cleaned_data['company_name']
-            user.seller_profile.save()
+        user = super().save(commit=True)
+
+        if user.user_type != User.BUYER:
+            profile = user.seller_profile
+            profile.company_name = self.cleaned_data.get("company_name", "")
+            profile.license_number = self.cleaned_data.get("license_number", "")
+            profile.street = self.cleaned_data.get("street", "")
+            profile.city = self.cleaned_data.get("city", "")
+            profile.postal_code = self.cleaned_data.get("postal_code", "")
+            profile.logo = self.cleaned_data.get("logo")
+            profile.cover_image = self.cleaned_data.get("cover_image")
+            profile.bio = self.cleaned_data.get("bio", "")
+            profile.save()
+
         return user
+
 
 class LoginForm(AuthenticationForm):
     username = forms.CharField(
-        widget=forms.TextInput(attrs={
-            'class': (
-                'w-full px-4 py-2 '
-                'border border-gray-300 '
-                'rounded-lg focus:outline-none '
-                'focus:ring-2 focus:ring-indigo-400'
-            ),
-            'placeholder': 'Username',
-        })
+        widget=forms.TextInput(
+            attrs={
+                "class": (
+                    "w-full px-4 py-2 "
+                    "border border-gray-300 "
+                    "rounded-lg focus:outline-none "
+                    "focus:ring-2 focus:ring-indigo-400"
+                ),
+                "placeholder": "Username",
+            }
+        )
     )
     password = forms.CharField(
-        widget=forms.PasswordInput(attrs={
-            'class': (
-                'w-full px-4 py-2 '
-                'border border-gray-300 '
-                'rounded-lg focus:outline-none '
-                'focus:ring-2 focus:ring-indigo-400'
-            ),
-            'placeholder': 'Password',
-        })
+        widget=forms.PasswordInput(
+            attrs={
+                "class": (
+                    "w-full px-4 py-2 "
+                    "border border-gray-300 "
+                    "rounded-lg focus:outline-none "
+                    "focus:ring-2 focus:ring-indigo-400"
+                ),
+                "placeholder": "Password",
+            }
+        )
     )
+
+
+# users/forms.py
+# users/forms.py  – put this near the top with the other imports
+from .models import User
 
 
 class ProfileForm(forms.ModelForm):
-    name = forms.CharField(
-        required=False,
-        widget=forms.TextInput(attrs={
-            'class': (
-                'w-full px-4 py-2 '
-                'border border-gray-300 '
-                'rounded-lg focus:outline-none '
-                'focus:ring-2 focus:ring-indigo-400'
-            ),
-            'placeholder': 'Full Name',
-        })
-    )
-    
-    phone = forms.CharField(
-        required=False,
-        widget=forms.TextInput(attrs={
-            'class': (
-                'w-full px-4 py-2 '
-                'border border-gray-300 '
-                'rounded-lg focus:outline-none '
-                'focus:ring-2 focus:ring-indigo-400'
-            ),
-            'placeholder': 'Phone Number',
-        })
-    )
-    
-    email = forms.EmailField(
-        required=True,
-        widget=forms.EmailInput(attrs={
-            'class': (
-                'w-full px-4 py-2 '
-                'border border-gray-300 '
-                'rounded-lg focus:outline-none '
-                'focus:ring-2 focus:ring-indigo-400'
-            ),
-            'placeholder': 'you@example.com',
-        })
-    )
-    profile_image = forms.ImageField(
-        required=False,
-        widget=forms.ClearableFileInput(attrs={
-            'class': (
-                'block w-full text-sm text-gray-500 '
-                'file:border file:border-gray-300 '
-                'file:rounded-lg file:py-2 file:px-4 '
-                'file:text-gray-700 focus:outline-none '
-                'focus:ring-2 focus:ring-indigo-400'
-            )
-        })
-    )
+    # ─── core user fields ─────────────────────────────
+    name = forms.CharField(required=False)
+    phone = forms.CharField(required=False)
+    email = forms.EmailField(required=True)
+    profile_image = forms.ImageField(required=False)
+
+    # ─── seller extras ───────────────────────────────
+    bio = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": 4}))
+    logo = forms.ImageField(required=False)
+    company_name = forms.CharField(required=False)
+    license_number = forms.CharField(required=False)
+    street = forms.CharField(required=False)
+    city = forms.CharField(required=False)
+    postal_code = forms.CharField(required=False)
 
     class Meta:
         model = User
-        fields = ['name', 'phone', 'email', 'profile_image']
+        fields = [
+            # user table
+            "name",
+            "phone",
+            "email",
+            "profile_image",
+            # seller profile
+            "bio",
+            "logo",
+            "company_name",
+            "license_number",
+            "street",
+            "city",
+            "postal_code",
+        ]
+
+    # Make agency fields mandatory for agency sellers
+    def clean(self):
+        cleaned = super().clean()
+        if self.instance.user_type == User.AGENCY_SELLER:
+            for fld in (
+                "company_name",
+                "license_number",
+                "street",
+                "city",
+                "postal_code",
+            ):
+                if not cleaned.get(fld):
+                    self.add_error(fld, "Required for agency sellers.")
+        return cleaned
+
+    # Copy the seller-side data into SellerProfile
+    def save(self, commit=True):
+        user = super().save(commit=True)
+        if user.user_type != User.BUYER:
+            sp = user.seller_profile
+            for fld in (
+                "bio",
+                "logo",
+                "company_name",
+                "license_number",
+                "street",
+                "city",
+                "postal_code",
+            ):
+                setattr(sp, fld, self.cleaned_data.get(fld))
+            sp.save()
+        return user
