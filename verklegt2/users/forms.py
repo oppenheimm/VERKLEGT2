@@ -1,12 +1,7 @@
-# users/forms.py
-import logging
-
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 from .models import User, SellerProfile
-
-logger = logging.getLogger(__name__)
 
 
 class SignUpForm(UserCreationForm):
@@ -86,19 +81,67 @@ class SignUpForm(UserCreationForm):
     )
 
     # ───────── seller-specific fields ─────────
-    company_name = forms.CharField(required=False, label="Company name (agency)")
-    license_number = forms.CharField(required=False, label="License number")
-    street = forms.CharField(required=False, label="Street name")
-    city = forms.CharField(required=False, label="City")
-    postal_code = forms.CharField(required=False, label="Postal code")
-
+    company_name = forms.CharField(
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": "w-full px-4 py-2 border border-gray-300 rounded-lg "
+                "focus:ring-2 focus:ring-indigo-400",
+                "placeholder": "Company name (if agency)",
+            }
+        ),
+        label="Company name (agency sellers only)",
+    )
+    license_number = forms.CharField(
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": "w-full px-4 py-2 border border-gray-300 rounded-lg "
+                "focus:ring-2 focus:ring-indigo-400",
+                "placeholder": "License number (if agency)",
+            }
+        ),
+        label="License number (agency sellers only)",
+    )
+    street = forms.CharField(
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": "w-full px-4 py-2 border border-gray-300 rounded-lg "
+                "focus:ring-2 focus:ring-indigo-400",
+                "placeholder": "Street address (if agency)",
+            }
+        ),
+        label="Street address (agency sellers only)",
+    )
+    city = forms.CharField(
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": "w-full px-4 py-2 border border-gray-300 rounded-lg "
+                "focus:ring-2 focus:ring-indigo-400",
+                "placeholder": "City (if agency)",
+            }
+        ),
+        label="City (agency sellers only)",
+    )
+    postal_code = forms.CharField(
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": "w-full px-4 py-2 border border-gray-300 rounded-lg "
+                "focus:ring-2 focus:ring-indigo-400",
+                "placeholder": "Postal code (if agency)",
+            }
+        ),
+        label="Postal code (agency sellers only)",
+    )
     bio = forms.CharField(
         required=False,
         widget=forms.Textarea(attrs={"rows": 4}),
         label="Bio",
     )
     logo = forms.ImageField(required=False, label="Logo (agency)")
-    cover_image = forms.ImageField(required=False, label="Cover image")
 
     # ▶ ONLY User-table fields go here
     class Meta(UserCreationForm.Meta):
@@ -128,8 +171,6 @@ class SignUpForm(UserCreationForm):
             "cursor-pointer bg-gray-50 focus:outline-none focus:ring-2 "
             "focus:ring-indigo-400"
         )
-        for fld in ("logo", "cover_image"):
-            self.fields[fld].widget.attrs.update({"class": file_style})
 
         self.fields["bio"].widget.attrs.update(
             {
@@ -166,8 +207,7 @@ class SignUpForm(UserCreationForm):
             profile.city = self.cleaned_data.get("city", "")
             profile.postal_code = self.cleaned_data.get("postal_code", "")
             profile.logo = self.cleaned_data.get("logo")
-            profile.cover_image = self.cleaned_data.get("cover_image")
-            profile.bio = self.cleaned_data.get("bio", "")
+            profile.bio = self.cleaned_data.get("bio", "")   # ← added already here
             profile.save()
 
         return user
@@ -202,68 +242,268 @@ class LoginForm(AuthenticationForm):
     )
 
 
-# users/forms.py
-# users/forms.py  – put this near the top with the other imports
-from .models import User
-
-
-class ProfileForm(forms.ModelForm):
-    # ─── core user fields ─────────────────────────────
-    name = forms.CharField(required=False)
-    phone = forms.CharField(required=False)
-    email = forms.EmailField(required=True)
-    profile_image = forms.ImageField(required=False)
-
-    # ─── seller extras ───────────────────────────────
-    bio = forms.CharField(required=False, widget=forms.Textarea(attrs={"rows": 4}))
-    logo = forms.ImageField(required=False)
-    company_name = forms.CharField(required=False)
-    license_number = forms.CharField(required=False)
-    street = forms.CharField(required=False)
-    city = forms.CharField(required=False)
-    postal_code = forms.CharField(required=False)
-
-    # inside ProfileForm ─ leave the rest as-is
-    logo = forms.ImageField(
+class UserForm(forms.ModelForm):
+    profile_image = forms.ImageField(
         required=False,
-        label="Logo",
         widget=forms.ClearableFileInput(
             attrs={
-                "id": "id_logo",  # so the <label for="…"> finds it
-                "class": "hidden",  # hide the real file element
-                "accept": "image/*",
+                "class": "w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:ring-2 focus:ring-indigo-400",
+            }
+        ),
+    )
+    logo = forms.ImageField(
+        required=False,
+        widget=forms.ClearableFileInput(
+            attrs={
+                "class": "w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:ring-2 focus:ring-indigo-400",
+            }
+        ),
+    )
+    bio = forms.CharField(
+        required=False,
+        widget=forms.Textarea(
+            attrs={
+                "rows": 4,
+                "class": "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400",
+                "placeholder": "Tell your story.",
+            }
+        ),
+    )
+    company_name = forms.CharField(
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400",
+                "placeholder": "Company name",
+            }
+        ),
+    )
+    street = forms.CharField(
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400",
+                "placeholder": "Street address",
+            }
+        ),
+    )
+    city = forms.CharField(
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400",
+                "placeholder": "City",
+            }
+        ),
+    )
+    postal_code = forms.CharField(
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400",
+                "placeholder": "Postal code",
             }
         ),
     )
 
     class Meta:
         model = User
-        fields = ["name", "phone", "email", "profile_image", "logo"]
+        fields = ["name", "email"]
+        widgets = {
+            "name": forms.TextInput(
+                attrs={
+                    "class": "w-full px-4 py-2 border border-gray-300 rounded-lg "
+                    "focus:ring-2 focus:ring-indigo-400",
+                    "placeholder": "First name",
+                }
+            ),
+            "email": forms.EmailInput(
+                attrs={
+                    "class": "w-full px-4 py-2 border border-gray-300 rounded-lg "
+                    "focus:ring-2 focus:ring-indigo-400",
+                    "placeholder": "Email",
+                }
+            ),
+        }
 
-    # Make agency fields mandatory for agency sellers
-    def clean(self):
-        cleaned = super().clean()
-        if self.instance.user_type == User.AGENCY_SELLER:
-            for fld in (
-                "company_name",
-                "license_number",
-                "street",
-                "city",
-                "postal_code",
-            ):
-                if not cleaned.get(fld):
-                    self.add_error(fld, "Required for agency sellers.")
-        return cleaned
+    # we get SellerProfile through this kwarg
+    def __init__(self, *args, **kwargs):
+        self.profile_instance = kwargs.pop("profile_instance", None)
+        super().__init__(*args, **kwargs)
 
-    # Copy the seller-side data into SellerProfile
+        if self.profile_instance:
+            self.fields["profile_image"].initial = (
+                self.profile_instance.profile_image
+            )
+            self.fields["logo"].initial = self.profile_instance.logo
+            self.fields["company_name"].initial = self.profile_instance.company_name
+            self.fields["company_address"].initial = (
+                self.profile_instance.company_address
+            )
+            self.fields["registration_number"].initial = (
+                self.profile_instance.registration_number
+            )
+
+    # ───────── save seller-side extras ─────────
     def save(self, commit=True):
-        user = super().save(commit=True)
+        user = super().save(commit=commit)
+        profile = self.profile_instance
 
-        # store the logo on the SellerProfile that already has a `logo` field
-        if user.user_type != User.BUYER:
-            sp = user.seller_profile
-            if self.cleaned_data.get("logo") is not None:
-                sp.logo = self.cleaned_data["logo"]
-                sp.save()
+        if profile:
+            profile.profile_image = self.cleaned_data.get(
+                "profile_image", profile.profile_image
+            )
+            profile.logo = self.cleaned_data.get("logo", profile.logo)
+            profile.company_name = self.cleaned_data.get("company_name")
+            profile.street = self.cleaned_data.get("company_address")
+            profile.city = self.cleaned_data.get("city")
+            profile.postal_code = self.cleaned_data.get("postal_code")
+            profile.bio = self.cleaned_data.get("bio", profile.bio)   # ← added line
+            profile.save()
 
         return user
+
+# class ProfileForm(forms.ModelForm):
+#     # ─── core user fields ─────────────────────────────
+#     name = forms.CharField(
+#         required=False,
+#         widget=forms.TextInput(
+#             attrs={
+#                 "class": "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400",
+#                 "placeholder": "Full Name",
+#             }
+#         ),
+#     )
+#     phone = forms.CharField(
+#         required=False,
+#         widget=forms.TextInput(
+#             attrs={
+#                 "class": "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400",
+#                 "placeholder": "Phone number",
+#             }
+#         ),
+#     )
+#     email = forms.EmailField(
+#         required=True,
+#         widget=forms.EmailInput(
+#             attrs={
+#                 "class": "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400",
+#                 "placeholder": "Email address",
+#             }
+#         ),
+#     )
+#     profile_image = forms.ImageField(
+#         required=False,
+#         widget=forms.ClearableFileInput(
+#             attrs={
+#                 "class": "w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:ring-2 focus:ring-indigo-400",
+#             }
+#         ),
+#     )
+
+#     # ─── seller extras ───────────────────────────────
+#     bio = forms.CharField(
+#         required=False,
+#         widget=forms.Textarea(
+#             attrs={
+#                 "rows": 4,
+#                 "class": "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400",
+#                 "placeholder": "Tell your story...",
+#             }
+#         ),
+#     )
+#     logo = forms.ImageField(
+#         required=False,
+#         widget=forms.ClearableFileInput(
+#             attrs={
+#                 "class": "w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:ring-2 focus:ring-indigo-400",
+#             }
+#         ),
+#     )
+#     company_name = forms.CharField(
+#         required=False,
+#         widget=forms.TextInput(
+#             attrs={
+#                 "class": "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400",
+#                 "placeholder": "Company name",
+#             }
+#         ),
+#     )
+#     license_number = forms.CharField(
+#         required=False,
+#         widget=forms.TextInput(
+#             attrs={
+#                 "class": "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400",
+#                 "placeholder": "License number",
+#             }
+#         ),
+#     )
+#     street = forms.CharField(
+#         required=False,
+#         widget=forms.TextInput(
+#             attrs={
+#                 "class": "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400",
+#                 "placeholder": "Street address",
+#             }
+#         ),
+#     )
+#     city = forms.CharField(
+#         required=False,
+#         widget=forms.TextInput(
+#             attrs={
+#                 "class": "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400",
+#                 "placeholder": "City",
+#             }
+#         ),
+#     )
+#     postal_code = forms.CharField(
+#         required=False,
+#         widget=forms.TextInput(
+#             attrs={
+#                 "class": "w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400",
+#                 "placeholder": "Postal code",
+#             }
+#         ),
+#     )
+
+#     # inside ProfileForm ─ leave the rest as-is
+#     logo = forms.ImageField(
+#         required=False,
+#         widget=forms.ClearableFileInput(
+#             attrs={
+#                 "class": "w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:ring-2 focus:ring-indigo-400",
+#             }
+#         ),
+#     )
+
+#     class Meta:
+#         model = User
+#         fields = ["name", "phone", "email", "profile_image", "logo"]
+
+#     # Make agency fields mandatory for agency sellers
+#     def clean(self):
+#         cleaned = super().clean()
+#         if self.instance.user_type == User.AGENCY_SELLER:
+#             for fld in (
+#                 "company_name",
+#                 "license_number",
+#                 "street",
+#                 "city",
+#                 "postal_code",
+#             ):
+#                 if not cleaned.get(fld):
+#                     self.add_error(fld, "Required for agency sellers.")
+#         return cleaned
+
+#     # Copy the seller-side data into SellerProfile
+#     def save(self, commit=True):
+#         user = super().save(commit=True)
+
+#         # store the logo on the SellerProfile that already has a `logo` field
+#         if user.user_type != User.BUYER:
+#             sp = user.seller_profile
+#             if self.cleaned_data.get("logo") is not None:
+#                 sp.logo = self.cleaned_data["logo"]
+#                 sp.save()
+
+#         return user

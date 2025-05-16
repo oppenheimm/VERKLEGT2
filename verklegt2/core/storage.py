@@ -3,8 +3,10 @@ from django.core.files.base import ContentFile, File
 from django.core.files.storage import Storage
 from django.apps import apps
 from django.urls import reverse
+from django.utils.deconstruct import deconstructible
 
 
+@deconstructible
 class DatabaseStorage(Storage):
     """
     Stores every uploaded file inside the FileBlob table.

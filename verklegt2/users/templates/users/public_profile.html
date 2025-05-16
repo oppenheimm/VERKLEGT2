@@ -24,20 +24,10 @@
 
   <hr class="my-6">
 
-
-
-
-{% load humanize %}
-...
-{% if profile.cover_image %}
-  <img src="{{ profile.cover_image.url }}" class="w-full h-48 object-cover rounded-lg mb-6">
-{% endif %}
-
 {% if profile.logo %}
   <img src="{{ profile.logo.url }}"
        class="w-32 h-32 object-contain mx-auto mb-4">
 {% endif %}
-
 
 <!-- just below the Profile-image input -->
 <div class="mb-4">
@@ -51,8 +41,7 @@
 {% if profile.is_agency %}
   <div class="mb-4 text-gray-700">
     {% if profile.company_name %}<p><strong>Company:</strong> {{ profile.company_name }}</p>{% endif %}
-    {% if profile.license_number %}<p><strong>License #:</strong> {{ profile.license_number }}</p>{% endif %}
-    {% if profile.address_display %}<p><strong>Address:</strong> {{ profile.address_display }}</p>{% endif %}
+    {% if profile.address_display %}<p><strong>Address:</strong> {{ profile.street }}, {{ profile.city }} {{profile.postal_code }}</p>{% endif %}
   </div>
 {% endif %}
 
