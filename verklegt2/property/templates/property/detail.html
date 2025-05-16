@@ -58,17 +58,30 @@
   </h3>
 
   
-  {% if user.is_authenticated and user.user_type == 'buyer'%}
-    {% if property.is_sold %}
-      <a class="inline-block mt-4 bg-green-600 text-white px-4 py-2 rounded opacity-50 cursor-not-allowed" aria-disabled="true">
-        Make a Purchasing Offer
-      </a>
-      <span class="text-md text-gray-500 mt-2 ml-2">This property has been sold.</span>
+  {% if user.is_authenticated and user.user_type == 'buyer' %}
+      {% if property.is_sold %}
+          {# unchanged — property is already sold #}
+          <a class="inline-block mt-4 bg-green-600 text-white px-4 py-2 rounded
+                    opacity-50 cursor-not-allowed" aria-disabled="true">
+              Make a Purchasing Offer
+          </a>
+          <span class="text-md text-gray-500 ml-2">This property has been sold.</span>
+
       {% else %}
-      <a href="{% url 'property:make_offer' property.id %}" class="inline-block mt-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-        Make a Purchasing Offer
-      </a>
-    {% endif %}
+          {% if existing_offer %}
+              <a href="{% url 'property:make_offer' property.id %}"
+                class="inline-block mt-4 bg-yellow-600 text-white px-4 py-2 rounded
+                        hover:bg-yellow-700">
+                  Resubmit Your Offer
+              </a>
+          {% else %}
+              <a href="{% url 'property:make_offer' property.id %}"
+                class="inline-block mt-4 bg-green-600 text-white px-4 py-2 rounded
+                        hover:bg-green-700">
+                  Make a Purchasing Offer
+              </a>
+          {% endif %}
+      {% endif %}
   {% endif %}
 
   <hr class="my-6" />

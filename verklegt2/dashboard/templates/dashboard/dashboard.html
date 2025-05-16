@@ -52,14 +52,20 @@ My Listings
     <div class="space-y-4">
       {% for offer in offers %}
         <div class="p-4 bg-white shadow rounded">
+          {% if offer.is_resubmission %}
+              <span class="px-2 py-0.5 rounded-full text-xs
+                          bg-purple-100 text-purple-700 font-semibold">
+                  Resubmitted Offer
+              </span>
+          {% endif %}
           <p><strong>Property:</strong> {{ offer.property.title }}</p>
           <p><strong>Buyer:</strong> {{ offer.buyer.username }}</p>
           <p><strong>Amount:</strong> {{ offer.amount|floatformat:"2" }} kr</p>
           {% if offer.message %}
           <p><strong>Message:</strong> {{ offer.message }}</p>
-          {% endif %}
-          <p class="text-sm text-gray-500">Submitted on {{ offer.created_at|date:"F j, Y, g:i a" }}</p>
+          {% endif %}          
           <p class="mt-2"><strong>Status:</strong> {{ offer.get_status_display }}</p>
+          <p class="text-sm text-gray-500">Submitted on {{ offer.created_at|date:"F j, Y, g:i a" }}</p>
 
           {% if offer.status == 'pending' %}
             <div class="mt-2 flex gap-2">
