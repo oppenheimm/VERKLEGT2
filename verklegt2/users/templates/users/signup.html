@@ -47,7 +47,13 @@
         {{ form.user_type.errors }}
       </div>
 
-      <!-- Company name (only for agency) -->
+      <!-- Agency only fields -->
+      <div class="mb-6 agency-field">
+        {{ form.logo.label_tag }}
+        {{ form.logo }}
+        {{ form.logo.errors }}
+      </div>
+
       <div id="div_id_company_name" class="mb-6 agency-field">
         {{ form.company_name.label_tag }}
         {{ form.company_name }}
