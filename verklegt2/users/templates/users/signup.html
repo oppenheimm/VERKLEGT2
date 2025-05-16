@@ -48,10 +48,34 @@
       </div>
 
       <!-- Company name (only for agency) -->
-      <div id="div_id_company_name" class="mb-6">
+      <div id="div_id_company_name" class="mb-6 agency-field">
         {{ form.company_name.label_tag }}
         {{ form.company_name }}
         {{ form.company_name.errors }}
+      </div>
+
+      <div id="div_id_license_number" class="mb-6 agency-field">
+        {{ form.license_number.label_tag }}
+        {{ form.license_number }}
+        {{ form.license_number.errors }}
+      </div>
+
+      <div id="div_id_street" class="mb-6 agency-field">
+        {{ form.street.label_tag }}
+        {{ form.street }}
+        {{ form.street.errors }}
+      </div>
+
+      <div id="div_id_city" class="mb-6 agency-field">
+        {{ form.city.label_tag }}
+        {{ form.city }}
+        {{ form.city.errors }}
+      </div>
+
+      <div id="div_id_postal_code" class="mb-6 agency-field">
+        {{ form.postal_code.label_tag }}
+        {{ form.postal_code }}
+        {{ form.postal_code.errors }}
       </div>
 
       <!-- Password -->
@@ -78,21 +102,18 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    const userTypeSelect = document.getElementById('id_user_type');
-    const companyFieldDiv = document.getElementById('div_id_company_name');
+    const userTypeSelect   = document.getElementById('id_user_type');
+    const agencyFields     = document.querySelectorAll('.agency-field');
 
-    function toggleCompanyField() {
-      if (userTypeSelect.value === 'agency_seller') {
-        companyFieldDiv.style.display = 'block';
-      } else {
-        companyFieldDiv.style.display = 'none';
-      }
+    function toggleAgencyFields() {
+      const show = userTypeSelect.value === 'agency_seller';
+      agencyFields.forEach(div => {
+        div.style.display = show ? '' : 'none';
+      });
     }
 
-    userTypeSelect.addEventListener('change', toggleCompanyField);
-
-    // Initial call on page load
-    toggleCompanyField();
+    userTypeSelect.addEventListener('change', toggleAgencyFields);
+    toggleAgencyFields();  // initial check on page load
   });
 </script>
 {% endblock %}

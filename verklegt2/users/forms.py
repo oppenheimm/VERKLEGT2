@@ -86,11 +86,46 @@ class SignUpForm(UserCreationForm):
     )
 
     # ───────── seller-specific fields ─────────
-    company_name = forms.CharField(required=False, label="Company name (agency)")
-    license_number = forms.CharField(required=False, label="License number")
-    street = forms.CharField(required=False, label="Street name")
-    city = forms.CharField(required=False, label="City")
-    postal_code = forms.CharField(required=False, label="Postal code")
+    company_name = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400',
+            'placeholder': 'Company name (if agency)',
+        }),
+        label="Company name (agency sellers only)"
+    )
+    license_number = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400',
+            'placeholder': 'License number (if agency)',
+        }),
+        label="License number (agency sellers only)"
+    )
+    street = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400',
+            'placeholder': 'Street address (if agency)',
+        }),
+        label="Street address (agency sellers only)"
+    )
+    city = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400',
+            'placeholder': 'City (if agency)',
+        }),
+        label="City (agency sellers only)"
+    )
+    postal_code = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400',
+            'placeholder': 'Postal code (if agency)',
+        }),
+        label="Postal code (agency sellers only)"
+    )
 
     bio = forms.CharField(
         required=False,
