@@ -32,10 +32,32 @@
         <p class="text-md text-gray-600">User Type: {{ request.user.user_type }}</p>
       </div>
     </div>
-    <h1 class="font-semibold">Logo:</h1>
-    {% if user.seller_profile.logo %}
-      <img src="{{ user.seller_profile.logo.url }}"
-          class="w-24 h-24 object-contain mr-4" alt="logo">
+
+    {# ────────────────────────────────────────────────────────────── #}
+    {# Extra section only for agency sellers                        #}
+    {# ────────────────────────────────────────────────────────────── #}
+    {% if user.user_type == "agency_seller" %}
+      <hr class="my-6">
+      <h2 class="text-xl font-semibold text-gray-800 mb-4">Agency Details</h2>
+
+      {% if user.seller_profile.logo %}
+        <div class="flex items-center mb-6">
+          <h2 class="font-semibold mr-4">Logo:</h2>
+          <img src="{{ user.seller_profile.logo.url }}" class="w-24 h-24 object-contain" alt="logo">
+        </div>
+      {% endif %}
+
+      <div class="flex flex-col gap-2 text-md text-gray-600">
+        <p><span class="font-medium text-gray-700">Company:</span> {{ user.seller_profile.company_name }}</p>
+        <p><span class="font-medium text-gray-700">License No:</span> {{ user.seller_profile.license_number }}</p>
+        <p>
+          <span class="font-medium text-gray-700">Address:</span>
+          {{ user.seller_profile.street }}, {{ user.seller_profile.city }} {{ user.seller_profile.postal_code }}
+        </p>
+        {% if user.seller_profile.bio %}
+          <p class="mt-2 whitespace-pre-line">{{ user.seller_profile.bio }}</p>
+        {% endif %}
+      </div>
     {% endif %}
 
     <div class="flex flex-col gap-3 mt-12 items-start">
@@ -56,10 +78,6 @@
                 Logout
             </button>
         </form>
-        {% comment %} <a href="{% url 'users:delete_account' %}"
-           class="inline-block text-center px-2 py-1 text-sm bg-red-800 hover:bg-red-900 text-white rounded-md">
-            Delete Account
-        </a> {% endcomment %}
     </div>
   </div>
 </div>
