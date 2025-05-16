@@ -60,7 +60,7 @@ My Listings
           {% endif %}
           <p><strong>Property:</strong> {{ offer.property.title }}</p>
           <p><strong>Buyer:</strong> {{ offer.buyer.username }}</p>
-          <p><strong>Amount:</strong> {{ offer.amount|floatformat:"2" }} kr</p>
+          <p><strong>Amount:</strong> {{ offer.amount|floatformat:"0"|intcomma }} kr</p>
           {% if offer.message %}
           <p><strong>Message:</strong> {{ offer.message }}</p>
           {% endif %}          
