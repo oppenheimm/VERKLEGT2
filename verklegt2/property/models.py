@@ -2,7 +2,8 @@ from django.db import models
 from django.conf import settings
 from users.models import User
 from core.storage import DatabaseStorage
-import uuid
+from geopy.geocoders import Nominatim
+from geopy.exc import GeocoderTimedOut
 
 
 class Category(models.Model):
@@ -37,6 +38,9 @@ class Property(models.Model):
     is_published = models.BooleanField(default=True)
     is_sold = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
 
     type = models.CharField(
         max_length=20,
@@ -69,6 +73,19 @@ class Property(models.Model):
         blank=True,
         null=True,
     )
+
+    def save(self, *args, **kwargs):
+        if (self.latitude is None or self.longitude is None) and self.address and self.city:
+            try:
+                geolocator = Nominatim(user_agent="django-real-estate-app")
+                location = geolocator.geocode(f"{self.address}, {self.zip_code} {self.city}")
+                if location:
+                    self.latitude = location.latitude
+                    self.longitude = location.longitude
+            except GeocoderTimedOut:
+                pass  # Optionally, retry here or log timeout
+
+        super().save(*args, **kwargs)
 
     class Meta:
         ordering = ["title"]
@@ -105,6 +122,11 @@ class PurchaseOffer(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     expiration_date = models.DateTimeField(blank=True, null=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    updated_at  = models.DateTimeField(auto_now=True)
+    is_resubmission = models.BooleanField(default=False)
+    status      = models.CharField(max_length=10,
+                                   choices=STATUS_CHOICES,
+                                   default='pending')
 
     def __str__(self):
         return f"Offer by {self.buyer.username} for {self.amount} kr on {self.property.title}"
