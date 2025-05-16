@@ -64,6 +64,34 @@
               class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg">
         Update Profile
       </button>
+
+      <div>
+  <p class="block text-sm font-medium text-gray-700 mb-1">
+      Logo (click to change)
+  </p>
+
+{# hidden file input #}
+{{ form.logo }}   {#  ← this now renders the <input> with id="id_logo" & class="hidden" #}
+
+
+  {# clickable circle shows current logo or placeholder #}
+  <label for="id_logo" class="cursor-pointer inline-block">
+    {% if request.user.seller_profile.logo %}
+      <img src="{{ request.user.seller_profile.logo.url }}"
+           class="w-24 h-24 rounded-full object-cover" alt="logo">
+    {% else %}
+      <div class="w-24 h-24 rounded-full bg-gray-200 flex
+                  items-center justify-center text-gray-500">
+        Add logo
+      </div>
+    {% endif %}
+  </label>
+
+  {% if form.logo.errors %}
+    <p class="text-red-500 text-sm mt-1">{{ form.logo.errors.0 }}</p>
+  {% endif %}
+</div>
+
     </form>
   </div>
 </div>

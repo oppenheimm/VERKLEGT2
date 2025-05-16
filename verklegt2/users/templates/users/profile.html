@@ -32,6 +32,12 @@
         <p class="text-md text-gray-600">User Type: {{ request.user.user_type }}</p>
       </div>
     </div>
+{% if user.seller_profile.logo %}
+  <img src="{{ user.seller_profile.logo.url }}"
+       class="w-20 h-20 object-contain rounded-full mr-4" alt="logo">
+{% endif %}
+
+
 
     <div class="flex flex-col gap-3 mt-12 items-start">
         <a href="{% url 'users:profile_edit' %}"

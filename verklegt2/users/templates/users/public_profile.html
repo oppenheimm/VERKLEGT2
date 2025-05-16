@@ -33,6 +33,17 @@
   <img src="{{ profile.cover_image.url }}" class="w-full h-48 object-cover rounded-lg mb-6">
 {% endif %}
 
+{% if profile.logo %}
+  <img src="{{ profile.logo.url }}"
+       class="w-32 h-32 object-contain mx-auto mb-4">
+{% endif %}
+
+
+<!-- just below the Profile-image input -->
+<div class="mb-4">
+  {{ form.logo.label_tag }}{{ form.logo }}{{ form.logo.errors }}
+</div>
+
 {% if profile.bio %}
   <p class="mb-4 text-gray-700">{{ profile.bio }}</p>
 {% endif %}

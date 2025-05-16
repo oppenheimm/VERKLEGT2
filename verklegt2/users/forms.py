@@ -223,23 +223,22 @@ class ProfileForm(forms.ModelForm):
     city = forms.CharField(required=False)
     postal_code = forms.CharField(required=False)
 
+    # inside ProfileForm ─ leave the rest as-is
+    logo = forms.ImageField(
+        required=False,
+        label="Logo",
+        widget=forms.ClearableFileInput(
+            attrs={
+                "id": "id_logo",  # so the <label for="…"> finds it
+                "class": "hidden",  # hide the real file element
+                "accept": "image/*",
+            }
+        ),
+    )
+
     class Meta:
         model = User
-        fields = [
-            # user table
-            "name",
-            "phone",
-            "email",
-            "profile_image",
-            # seller profile
-            "bio",
-            "logo",
-            "company_name",
-            "license_number",
-            "street",
-            "city",
-            "postal_code",
-        ]
+        fields = ["name", "phone", "email", "profile_image", "logo"]
 
     # Make agency fields mandatory for agency sellers
     def clean(self):
@@ -259,17 +258,12 @@ class ProfileForm(forms.ModelForm):
     # Copy the seller-side data into SellerProfile
     def save(self, commit=True):
         user = super().save(commit=True)
+
+        # store the logo on the SellerProfile that already has a `logo` field
         if user.user_type != User.BUYER:
             sp = user.seller_profile
-            for fld in (
-                "bio",
-                "logo",
-                "company_name",
-                "license_number",
-                "street",
-                "city",
-                "postal_code",
-            ):
-                setattr(sp, fld, self.cleaned_data.get(fld))
-            sp.save()
+            if self.cleaned_data.get("logo") is not None:
+                sp.logo = self.cleaned_data["logo"]
+                sp.save()
+
         return user
