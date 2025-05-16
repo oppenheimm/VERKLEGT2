@@ -90,10 +90,14 @@ def property_list(request):
 def property_detail(request, id):
     property_obj = get_object_or_404(Property, id=id, is_published=True)
 
-    # fetch other properties with the same zip code (excluding current)
+    existing_offer = None
+    if request.user.is_authenticated and request.user.user_type == "buyer":
+        existing_offer = PurchaseOffer.objects.filter(
+            property=property_obj, buyer=request.user
+        ).first()
+
     related_properties = Property.objects.filter(
-        zip_code=property_obj.zip_code,
-        is_published=True
+        zip_code=property_obj.zip_code, is_published=True
     ).exclude(id=property_obj.id)
 
     return render(
@@ -101,8 +105,9 @@ def property_detail(request, id):
         "property/detail.html",
         {
             "property": property_obj,
-            "related_properties": related_properties
-        }
+            "related_properties": related_properties,
+            "existing_offer": existing_offer,
+        },
     )
 
 
@@ -178,21 +183,43 @@ def edit_property(request, id):
 def make_offer(request, property_id):
     property_obj = get_object_or_404(Property, pk=property_id)
 
-    if request.user.user_type != 'buyer':
-        return redirect('property:detail', property_id)
+    if request.user.user_type != "buyer":
+        return redirect("property:detail", property_id)
 
-    if request.method == 'POST':
-        form = PurchaseOfferForm(request.POST)
+    existing_offer = PurchaseOffer.objects.filter(
+        property=property_obj, buyer=request.user
+    ).first()
+
+    if request.method == "POST":
+        form = PurchaseOfferForm(request.POST, instance=existing_offer)
         if form.is_valid():
             offer = form.save(commit=False)
             offer.property = property_obj
             offer.buyer = request.user
-            offer.save()
-            return redirect('property:detail', property_id)
-    else:
-        form = PurchaseOfferForm()
 
-    return render(request, 'property/make_offer.html', {'form': form, 'property': property_obj})
+            offer.status = "pending"
+            
+            # Mark the offer as a resubmission if it already exists
+            if existing_offer:
+                offer.is_resubmission = True
+
+            offer.save()
+
+            msg = (
+                "Offer updated — status set back to pending."
+                if existing_offer
+                else "Offer submitted — pending review."
+            )
+            messages.success(request, msg)
+            return redirect("property:detail", property_id)
+    else:
+        form = PurchaseOfferForm(instance=existing_offer)
+
+    return render(
+        request,
+        "property/make_offer.html",
+        {"form": form, "property": property_obj},
+    )
 
 
 @login_required

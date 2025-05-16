@@ -28,6 +28,13 @@
                 {% else %}
                   <span class="ml-2 text-gray-600">Pending</span>
                 {% endif %}
+                  
+                {% if offer.is_resubmission %}
+                  <span class="ml-3 px-2 py-0.5 rounded-full text-xs
+                              bg-purple-100 text-purple-700 font-semibold">
+                      Resubmitted
+                  </span>
+                {% endif %}
               </p>
               <p class="text-sm text-gray-500 mt-12">Submitted on {{ offer.created_at|date:"F j, Y, g:i a" }}</p>
             </div>
