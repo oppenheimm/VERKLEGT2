@@ -24,7 +24,7 @@
     </button>
   </div>
 
-  <!-- FILTER FORM (initially hidden unless filters applied) -->
+  <!-- FILTER FORM-->
   <div id="filterMenu" class="mb-6 {% if request.GET %}{% else %}hidden{% endif %}">
     <hr class="my-6" />
     <form method="get" class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -185,7 +185,7 @@
     input.value = input.value.replace(/\./g, '').replace(/[^\d]/g, '');
   }
 
-  // On page load, format prices visually
+
   window.addEventListener("DOMContentLoaded", () => {
     const min = document.querySelector("input[name='min_price']");
     const max = document.querySelector("input[name='max_price']");

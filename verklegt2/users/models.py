@@ -7,11 +7,13 @@ from core.storage import DatabaseStorage
 
 
 def user_profile_image_path(instance, filename):
-    # will go into DB with a “path” like "profile_images/user_<id>/<filename>"
+
     return f"profile_images/user_{instance.id}/{filename}"
+
 
 def user_logo_image_path(instance, filename):
     return f"profile_logos/user_{instance.id}/{filename}"
+
 
 class User(AbstractUser):
     """
@@ -41,7 +43,7 @@ class User(AbstractUser):
     phone = models.CharField(max_length=20, blank=True)
     email = models.EmailField("email address", unique=True)
     name = models.CharField("full name", max_length=255, blank=True)
-    
+
     profile_image = models.ImageField(
         upload_to=user_profile_image_path,
         storage=DatabaseStorage(),
@@ -90,7 +92,6 @@ class SellerProfile(models.Model):
         related_name="seller_profile",
     )
 
-    # Address (only relevant for agencies)
     street = models.CharField(max_length=255, blank=True)
     city = models.CharField(max_length=100, blank=True)
     postal_code = models.CharField(max_length=20, blank=True)
@@ -98,8 +99,9 @@ class SellerProfile(models.Model):
     logo = models.ImageField(
         upload_to=user_logo_image_path,
         storage=DatabaseStorage(),
-        blank=True, null=True,
-        help_text="Your company logo—also stored in the database."
+        blank=True,
+        null=True,
+        help_text="Your company logo—also stored in the database.",
     )
     bio = models.TextField(blank=True)
 
@@ -117,7 +119,5 @@ class SellerProfile(models.Model):
     @property
     def address_display(self):
         if self.is_agency:
-            return (
-                f"{self.street}, {self.city} {self.postal_code}".strip()
-            )  # hide if empty
+            return f"{self.street}, {self.city} {self.postal_code}".strip()
         return ""

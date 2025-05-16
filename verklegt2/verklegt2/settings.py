@@ -28,7 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 LOGIN_URL = "users:login"
-LOGIN_REDIRECT_URL = "/"  # where to send users after login
+LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "users:login"
 
 # Application definition
@@ -73,7 +73,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                'dashboard.context_processors.notification_context',
+                "dashboard.context_processors.notification_context",
             ],
         },
     },

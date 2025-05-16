@@ -18,7 +18,6 @@ from .models import User
 
 
 class SignUpView(CreateView):
-    """Render the registration form and create an account."""
 
     form_class = SignUpForm
     template_name = "users/signup.html"
@@ -26,7 +25,6 @@ class SignUpView(CreateView):
 
 
 class LoginView(DjangoLoginView):
-    """Username / password login."""
 
     form_class = LoginForm
     template_name = "users/login.html"
@@ -34,13 +32,11 @@ class LoginView(DjangoLoginView):
 
 
 class LogoutView(DjangoLogoutView):
-    """Log the user out and redirect to the login screen."""
 
     next_page = reverse_lazy("users:login")
 
 
 class ProfileDetailView(LoginRequiredMixin, TemplateView):
-    """Show a small profile page with edit + change‑password actions."""
 
     template_name = "users/profile.html"
 
@@ -51,11 +47,11 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy("users:profile")
 
     def get_object(self):
-        """``UpdateView`` needs the object it should edit – that’s ``request.user``."""
+
         return self.request.user
 
     def get_form_kwargs(self):
-        """Return the normal kwargs – *without* ``profile_instance``."""
+
         return super().get_form_kwargs()
 
     def get_form(self, form_class=None):
@@ -92,10 +88,8 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
             form.initial.setdefault("postal_code", profile.postal_code)
 
         return form
-    
-    
+
     def form_valid(self, form):
-        """Persist changes to ``User`` *and* ``SellerProfile`` (if any)."""
 
         response = super().form_valid(form)
 
@@ -127,7 +121,6 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
 
 
 class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
-    """Separate page for changing password."""
 
     template_name = "users/password_change.html"
     success_url = reverse_lazy("users:password_change_done")
@@ -142,7 +135,6 @@ class CustomPasswordChangeDoneView(LoginRequiredMixin, PasswordChangeDoneView):
 
 
 class PublicProfileView(TemplateView):
-    """Public‑facing seller profile page (no login required)."""
 
     template_name = "users/public_profile.html"
 
@@ -152,5 +144,7 @@ class PublicProfileView(TemplateView):
         ctx["seller"] = seller
         if seller.user_type != User.BUYER:
             ctx["profile"] = seller.seller_profile
-        ctx["properties"] = seller.properties.filter(is_published=True).order_by("-created_at")
+        ctx["properties"] = seller.properties.filter(is_published=True).order_by(
+            "-created_at"
+        )
         return ctx

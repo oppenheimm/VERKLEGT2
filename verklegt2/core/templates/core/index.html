@@ -1,6 +1,6 @@
 {% extends "base.html" %} {% load humanize %} {% block title %}Castle Apartments
 | Home{% endblock %} {% block content %}
-<!-- Hero -->
+
 <div class="bg-gradient-to-b from-blue-100 to-white min-h-screen pt-6">
 
   <section class="container mx-auto max-w-7xl px-6">
@@ -13,7 +13,7 @@
         background-repeat: no-repeat;
       "
     >
-      <!-- Hero text -->
+    
       <div class="pl-6">
         <h1 class="text-4xl lg:text-5xl font-extrabold mb-4 leading-tight">
           Easy way to find a perfect property
@@ -23,13 +23,13 @@
           estate.
         </p>
 
-        <!-- Search box -->
+      
         <form
           action="{% url 'property:list' %}"
           method="get"
           class="flex flex-col sm:flex-row gap-4 bg-white px-4 py-3 rounded-xl shadow-lg max-w-xl text-xs"
         >
-          <!-- City -->
+          
           <select
             name="city"
             class="flex-1 appearance-none bg-transparent focus:outline-none"
@@ -42,7 +42,6 @@
 
           <span class="hidden sm:block w-px bg-slate-200"></span>
 
-          <!-- Type -->
           <select
             name="type"
             class="flex-1 appearance-none bg-transparent focus:outline-none"
@@ -55,7 +54,7 @@
 
           <span class="hidden sm:block w-px bg-slate-200"></span>
 
-          <!-- Price range (uses fixed ranges) -->
+
           <select
             name="price_range"
             class="flex-1 appearance-none bg-transparent focus:outline-none"
@@ -94,7 +93,7 @@
     </p>
 
     <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-      <!-- You can loop over properties dynamically with Django later -->
+
       {% for property in featured_properties %}
       <a
         href="{% url 'property:detail' property.id %}"
