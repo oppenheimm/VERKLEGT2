@@ -65,12 +65,14 @@
           <p><strong>Amount:</strong> {{ offer.amount|floatformat:"0"|intcomma }} kr</p>
           <p><strong>Status:</strong> 
             {% if offer.status == 'accepted' %}
-              <span class="text-green-600 font-semibold pr-2">Accepted</span>
+              <span class="text-blue-600 font-semibold pr-2">Accepted</span>
               <a href="{% url 'finalize_offer' offer.id 'contact' %}" class="bg-blue-500 text-white font-semibold py-1 px-2 rounded hover:bg-blue-800">
                 Finish Purchase
               </a>
             {% elif offer.status == 'declined' %}
               <span class="text-red-600 font-semibold">Declined</span>
+            {% elif offer.status == 'finalized' %}
+              <span class="text-green-600 font-semibold pr-2">Finalized</span>
             {% else %}
               <span class="text-gray-600">Pending</span>
             {% endif %}
