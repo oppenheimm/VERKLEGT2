@@ -18,80 +18,36 @@
 
     <form method="post" enctype="multipart/form-data" class="space-y-6">
       {% csrf_token %}
-      {{ form.non_field_errors }}
 
-      <div>
-        <label for="{{ form.name.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
-          Full Name
-        </label>
-        {{ form.name }}
-        {% if form.name.errors %}
-          <p class="text-red-500 text-sm mt-1">{{ form.name.errors.0 }}</p>
-        {% endif %}
-      </div>
+      {% if form.non_field_errors %}
+        <div class="bg-red-100 text-red-800 p-3 rounded mb-4">
+          {{ form.non_field_errors }}
+        </div>
+      {% endif %}
 
-      <div>
-        <label for="{{ form.phone.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
-          Phone Number
-        </label>
-        {{ form.phone }}
-        {% if form.phone.errors %}
-          <p class="text-red-500 text-sm mt-1">{{ form.phone.errors.0 }}</p>
-        {% endif %}
-      </div>
+      {% for field in form %}
+        <div>
+          <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+            {{ field.label }}
+          </label>
+          {{ field }}
+          {% if field.errors %}
+            <p class="text-red-500 text-sm mt-1">{{ field.errors.0 }}</p>
+          {% endif %}
+        </div>
+      {% endfor %}
 
-      <div>
-        <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
-          Email
-        </label>
-        {{ form.email }}
-        {% if form.email.errors %}
-          <p class="text-red-500 text-sm mt-1">{{ form.email.errors.0 }}</p>
-        {% endif %}
-      </div>
-
-      <div>
-        <label for="{{ form.profile_image.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
-          Profile Image
-        </label>
-        {{ form.profile_image }}
-        {% if form.profile_image.errors %}
-          <p class="text-red-500 text-sm mt-1">{{ form.profile_image.errors.0 }}</p>
-        {% endif %}
-      </div>
+      {% if request.user.seller_profile.logo %}
+        <div class="mt-4">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Current Logo</label>
+          <img src="{{ request.user.seller_profile.logo.url }}" class="w-24 h-24 object-cover rounded-full" alt="Logo">
+        </div>
+      {% endif %}
 
       <button type="submit"
               class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg">
         Update Profile
       </button>
-
-      <div>
-  <p class="block text-sm font-medium text-gray-700 mb-1">
-      Logo (click to change)
-  </p>
-
-{# hidden file input #}
-{{ form.logo }}   {#  ← this now renders the <input> with id="id_logo" & class="hidden" #}
-
-
-  {# clickable circle shows current logo or placeholder #}
-  <label for="id_logo" class="cursor-pointer inline-block">
-    {% if request.user.seller_profile.logo %}
-      <img src="{{ request.user.seller_profile.logo.url }}"
-           class="w-24 h-24 rounded-full object-cover" alt="logo">
-    {% else %}
-      <div class="w-24 h-24 rounded-full bg-gray-200 flex
-                  items-center justify-center text-gray-500">
-        Add logo
-      </div>
-    {% endif %}
-  </label>
-
-  {% if form.logo.errors %}
-    <p class="text-red-500 text-sm mt-1">{{ form.logo.errors.0 }}</p>
-  {% endif %}
-</div>
-
     </form>
   </div>
 </div>

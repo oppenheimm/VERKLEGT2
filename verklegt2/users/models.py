@@ -3,15 +3,15 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from core.storage import DatabaseStorage
 
 
 def user_profile_image_path(instance, filename):
-    """
-    Generate file path for new user profile image:
-    MEDIA_ROOT/profile_images/user_<id>/<filename>
-    """
+    # will go into DB with a “path” like "profile_images/user_<id>/<filename>"
     return f"profile_images/user_{instance.id}/{filename}"
 
+def user_logo_image_path(instance, filename):
+    return f"profile_logos/user_{instance.id}/{filename}"
 
 class User(AbstractUser):
     """
@@ -41,8 +41,10 @@ class User(AbstractUser):
     phone = models.CharField(max_length=20, blank=True)
     email = models.EmailField("email address", unique=True)
     name = models.CharField("full name", max_length=255, blank=True)
+    
     profile_image = models.ImageField(
         upload_to=user_profile_image_path,
+        storage=DatabaseStorage(),
         blank=True,
         null=True,
         help_text="Upload a profile picture.",
@@ -93,8 +95,12 @@ class SellerProfile(models.Model):
     city = models.CharField(max_length=100, blank=True)
     postal_code = models.CharField(max_length=20, blank=True)
 
-    logo = models.ImageField(upload_to="seller_logos/", blank=True, null=True)
-    cover_image = models.ImageField(upload_to="seller_covers/", blank=True, null=True)
+    logo = models.ImageField(
+        upload_to=user_logo_image_path,
+        storage=DatabaseStorage(),
+        blank=True, null=True,
+        help_text="Your company logo—also stored in the database."
+    )
     bio = models.TextField(blank=True)
 
     # Existing fields
